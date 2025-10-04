@@ -1,0 +1,40 @@
+name: food_recognizer
+description: "Submission Dicoding: Belajar Penerapan Machine Learning pada Flutter"
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  camera: ^0.11.2
+  cupertino_icons: ^1.0.8
+  flutter:
+    sdk: flutter
+  image_cropper: ^11.0.0
+  image_picker: ^1.2.0
+  import_sorter: ^4.6.0
+  provider: ^6.1.5+1
+
+dev_dependencies:
+  flutter_lints: ^5.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  # assets:
+  #   - images/a_dot_burr.jpeg
+  #   - images/a_dot_ham.jpeg
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
