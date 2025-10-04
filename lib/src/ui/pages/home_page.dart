@@ -8,7 +8,9 @@ import 'package:image_picker/image_picker.dart';
 
 // Project imports:
 import 'package:food_recognizer/core/extensions/text_style_extension.dart';
-import 'package:food_recognizer/src/data/services/api/image_service.dart';
+import 'package:food_recognizer/core/routes/route_names.dart';
+import 'package:food_recognizer/core/utilities/navigator_key.dart';
+import 'package:food_recognizer/src/services/image_service.dart';
 import 'package:food_recognizer/src/ui/widget/scaffold_safe_area.dart';
 
 class HomePage extends StatelessWidget {
@@ -30,15 +32,15 @@ class _HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: ColorScheme.of(context).inversePrimary,
-      title: Text('Food Recognizer App'),
+      title: Text('Food Recognizer'),
       titleTextStyle: TextTheme.of(context).titleLarge!.semiBold.colorOnSurface(context),
       actions: [
         IconButton(
           icon: Icon(Icons.linked_camera_outlined),
           iconSize: 28,
           color: ColorScheme.of(context).onSurface,
-          onPressed: () {},
-          tooltip: 'Live Analyzer',
+          onPressed: () => navigatorKey.currentState!.pushNamed(Routes.liveCamera),
+          tooltip: 'Live Recognizer',
         ),
       ],
     );
@@ -84,9 +86,7 @@ class _HomeBody extends StatelessWidget {
                           highlightElevation: 0,
                           foregroundColor: ColorScheme.of(context).outline,
                           backgroundColor: ColorScheme.of(context).surfaceContainer,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadiusGeometry.circular(999),
-                          ),
+                          shape: CircleBorder(),
                           onPressed: () => pickImageFile(context, ImageSource.gallery),
                           child: Icon(Icons.photo_library_outlined),
                         ),
@@ -145,8 +145,16 @@ class _HomeBody extends StatelessWidget {
         aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
       );
 
+      if (!context.mounted) return;
+
       if (croppedImage != null) {
-        debugPrint(croppedImage.path);
+        final imgByte = await croppedImage.readAsBytes();
+
+        debugPrint("fajri from: ${imgByte.length}");
+
+        final compressImgByte = await ImageService.compressImage(imgByte);
+
+        debugPrint("fajri to: ${compressImgByte.length}");
       }
     }
   }

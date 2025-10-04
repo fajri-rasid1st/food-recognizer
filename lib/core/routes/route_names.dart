@@ -2,5 +2,5 @@
 class Routes {
   static const result = '/result';
   static const detail = '/detail';
-  static const cameraView = '/camera-view';
+  static const liveCamera = '/live-camera';
 }

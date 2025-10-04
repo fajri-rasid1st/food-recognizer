@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Project imports:
 import 'package:food_recognizer/core/routes/route_names.dart';
+import 'package:food_recognizer/src/ui/pages/live_camera_page.dart';
 
 /// Routes generator
 Route<dynamic>? generateAppRoutes(RouteSettings settings) {
@@ -19,9 +20,9 @@ Route<dynamic>? generateAppRoutes(RouteSettings settings) {
         builder: (context) => Placeholder(),
       );
 
-    case Routes.cameraView:
+    case Routes.liveCamera:
       return MaterialPageRoute(
-        builder: (context) => Placeholder(),
+        builder: (context) => LiveCameraPage(),
       );
 
     default:
