@@ -4,67 +4,67 @@ import 'package:flutter/material.dart';
 extension TextStyleExtension on TextStyle {
   // Colors
   TextStyle colorPrimary(BuildContext context) => copyWith(
-    color: Theme.of(context).colorScheme.primary,
+    color: ColorScheme.of(context).primary,
   );
   TextStyle colorOnPrimary(BuildContext context) => copyWith(
-    color: Theme.of(context).colorScheme.onPrimary,
+    color: ColorScheme.of(context).onPrimary,
   );
   TextStyle colorPrimaryContainer(BuildContext context) => copyWith(
-    color: Theme.of(context).colorScheme.primaryContainer,
+    color: ColorScheme.of(context).primaryContainer,
   );
   TextStyle colorOnPrimaryContainer(BuildContext context) => copyWith(
-    color: Theme.of(context).colorScheme.onPrimaryContainer,
+    color: ColorScheme.of(context).onPrimaryContainer,
   );
   TextStyle colorSecondary(BuildContext context) => copyWith(
-    color: Theme.of(context).colorScheme.secondary,
+    color: ColorScheme.of(context).secondary,
   );
   TextStyle colorOnSecondary(BuildContext context) => copyWith(
-    color: Theme.of(context).colorScheme.onSecondary,
+    color: ColorScheme.of(context).onSecondary,
   );
   TextStyle colorSecondaryContainer(BuildContext context) => copyWith(
-    color: Theme.of(context).colorScheme.secondaryContainer,
+    color: ColorScheme.of(context).secondaryContainer,
   );
   TextStyle colorOnSecondaryContainer(BuildContext context) => copyWith(
-    color: Theme.of(context).colorScheme.onSecondaryContainer,
+    color: ColorScheme.of(context).onSecondaryContainer,
   );
   TextStyle colorTertiary(BuildContext context) => copyWith(
-    color: Theme.of(context).colorScheme.tertiary,
+    color: ColorScheme.of(context).tertiary,
   );
   TextStyle colorOnTertiary(BuildContext context) => copyWith(
-    color: Theme.of(context).colorScheme.onTertiary,
+    color: ColorScheme.of(context).onTertiary,
   );
   TextStyle colorTertiaryContainer(BuildContext context) => copyWith(
-    color: Theme.of(context).colorScheme.tertiaryContainer,
+    color: ColorScheme.of(context).tertiaryContainer,
   );
   TextStyle colorOnTertiaryContainer(BuildContext context) => copyWith(
-    color: Theme.of(context).colorScheme.onTertiaryContainer,
+    color: ColorScheme.of(context).onTertiaryContainer,
   );
   TextStyle colorError(BuildContext context) => copyWith(
-    color: Theme.of(context).colorScheme.error,
+    color: ColorScheme.of(context).error,
   );
   TextStyle colorOnError(BuildContext context) => copyWith(
-    color: Theme.of(context).colorScheme.onError,
+    color: ColorScheme.of(context).onError,
   );
   TextStyle colorErrorContainer(BuildContext context) => copyWith(
-    color: Theme.of(context).colorScheme.errorContainer,
+    color: ColorScheme.of(context).errorContainer,
   );
   TextStyle colorOnErrorContainer(BuildContext context) => copyWith(
-    color: Theme.of(context).colorScheme.onErrorContainer,
+    color: ColorScheme.of(context).onErrorContainer,
   );
   TextStyle colorSurface(BuildContext context) => copyWith(
-    color: Theme.of(context).colorScheme.surface,
+    color: ColorScheme.of(context).surface,
   );
   TextStyle colorOnSurface(BuildContext context) => copyWith(
-    color: Theme.of(context).colorScheme.onSurface,
+    color: ColorScheme.of(context).onSurface,
   );
   TextStyle colorOnSurfaceVariant(BuildContext context) => copyWith(
-    color: Theme.of(context).colorScheme.onSurfaceVariant,
+    color: ColorScheme.of(context).onSurfaceVariant,
   );
   TextStyle colorOutline(BuildContext context) => copyWith(
-    color: Theme.of(context).colorScheme.outline,
+    color: ColorScheme.of(context).outline,
   );
   TextStyle colorOutlineVariant(BuildContext context) => copyWith(
-    color: Theme.of(context).colorScheme.outlineVariant,
+    color: ColorScheme.of(context).outlineVariant,
   );
 
   // Weights

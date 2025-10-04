@@ -2,11 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-// Package imports:
-import 'package:provider/provider.dart';
-
 // Project imports:
 import 'package:food_recognizer/app.dart';
+
+// Package imports:
+// import 'package:provider/provider.dart';
+
 
 void main() {
   // Memastikan widget Flutter sudah diinisialisasi
@@ -18,10 +19,12 @@ void main() {
     DeviceOrientation.portraitDown,
   ]);
 
-  runApp(
-    MultiProvider(
-      providers: [],
-      child: FoodRecognizerApp(),
-    ),
-  );
+  runApp(FoodRecognizerApp());
+
+  // runApp(
+  //   MultiProvider(
+  //     providers: [],
+  //     child: FoodRecognizerApp(),
+  //   ),
+  // );
 }

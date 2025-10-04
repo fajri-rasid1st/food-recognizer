@@ -9,7 +9,7 @@ TextTheme buildTextTheme(ColorScheme scheme) {
       ? ThemeData(brightness: Brightness.dark).textTheme
       : ThemeData(brightness: Brightness.light).textTheme;
 
-  return GoogleFonts.montserratTextTheme(base).apply(
+  return GoogleFonts.poppinsTextTheme(base).apply(
     bodyColor: scheme.onSurface,
     displayColor: scheme.onSurface,
   );

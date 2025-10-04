@@ -37,7 +37,7 @@ class CustomInformation extends StatelessWidget {
             Text(
               title,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleMedium!.bold.colorPrimary(context),
+              style: TextTheme.of(context).titleMedium!.bold.colorPrimary(context),
             ),
             SizedBox(height: 8),
             Text(
@@ -45,7 +45,7 @@ class CustomInformation extends StatelessWidget {
               textAlign: TextAlign.center,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.bodyMedium!.colorOutline(context),
+              style: TextTheme.of(context).bodyMedium!.colorOutline(context),
             ),
             SizedBox(height: 16),
             if (child != null) child!,
