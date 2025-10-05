@@ -69,7 +69,7 @@ class _ResultBodyState extends State<_ResultBody> {
       // todo-02: run the inference model based on user picture
       if (!mounted) return;
 
-      context.read<MealApiProvider>().getMeals('burger');
+      context.read<MealApiProvider>().getMeals('salad');
     });
   }
 
@@ -115,7 +115,7 @@ class _ResultBodyState extends State<_ResultBody> {
               ),
             ],
           ),
-          Divider(height: 32),
+          SizedBox(height: 16),
           Text(
             'Informasi Nilai Gizi',
             style: TextTheme.of(context).titleMedium!.semiBold,
@@ -124,7 +124,7 @@ class _ResultBodyState extends State<_ResultBody> {
           ...List<Padding>.generate(
             dummyNutritions.length,
             (index) => Padding(
-              padding: EdgeInsets.only(bottom: 2),
+              padding: EdgeInsets.only(bottom: 4),
               child: Row(
                 spacing: 8,
                 children: [
@@ -144,7 +144,7 @@ class _ResultBodyState extends State<_ResultBody> {
           ),
           SizedBox(height: 20),
           Text(
-            'Referensi Makanan Serupa',
+            'Referensi Masakan',
             style: TextTheme.of(context).titleMedium!.semiBold,
           ),
           Divider(height: 32),

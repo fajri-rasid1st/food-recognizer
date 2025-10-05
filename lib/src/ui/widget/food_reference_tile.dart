@@ -39,12 +39,15 @@ class FoodReferenceTile extends StatelessWidget {
                 ),
                 ClipRRect(
                   borderRadius: BorderRadiusGeometry.circular(8),
-                  child: FadeInImage.memoryNetwork(
-                    image: '${meal.strMealThumb}',
-                    placeholder: kTransparentImage,
-                    fit: BoxFit.cover,
-                    width: 56,
-                    height: 56,
+                  child: Hero(
+                    tag: meal,
+                    child: FadeInImage.memoryNetwork(
+                      image: '${meal.strMealThumb}',
+                      placeholder: kTransparentImage,
+                      fit: BoxFit.cover,
+                      width: 56,
+                      height: 56,
+                    ),
                   ),
                 ),
               ],
