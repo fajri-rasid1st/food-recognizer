@@ -32,7 +32,7 @@ class _AnalyzingText extends StatelessWidget {
 
     return Text(
       text.value,
-      style: TextTheme.of(context).titleLarge!.bold.colorOnSurfaceVariant(context),
+      style: TextTheme.of(context).titleLarge!.bold,
     );
   }
 }

@@ -63,7 +63,6 @@ class _HomeBody extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(20),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
@@ -78,7 +77,7 @@ class _HomeBody extends StatelessWidget {
                   color: ColorScheme.of(context).outlineVariant,
                 ),
                 child: SizedBox(
-                  width: MediaQuery.widthOf(context) - 56,
+                  width: MediaQuery.widthOf(context),
                   height: MediaQuery.widthOf(context) - 56,
                   child: imageBytes != null ? _ImagePreviewWidget(imageBytes) : _ImagePickerWidget(),
                 ),
@@ -89,7 +88,12 @@ class _HomeBody extends StatelessWidget {
             style: FilledButton.styleFrom(
               textStyle: TextTheme.of(context).titleSmall!.semiBold,
             ),
-            onPressed: imageBytes != null ? () => navigatorKey.currentState!.pushNamed(Routes.result) : null,
+            onPressed: imageBytes != null
+                ? () => navigatorKey.currentState!.pushNamed(
+                    Routes.result,
+                    arguments: {'imageBytes': imageBytes},
+                  )
+                : null,
             child: Text('Analyze'),
           ),
         ],
@@ -104,6 +108,7 @@ class _ImagePickerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      spacing: 12,
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -119,7 +124,6 @@ class _ImagePickerWidget extends StatelessWidget {
           onPressed: () => context.read<HomeProvider>().pickImageFile(context, ImageSource.gallery),
           child: Icon(Icons.photo_library_outlined),
         ),
-        SizedBox(height: 12),
         GestureDetector(
           onTap: () => context.read<HomeProvider>().pickImageFile(context, ImageSource.gallery),
           child: Text(
@@ -127,12 +131,10 @@ class _ImagePickerWidget extends StatelessWidget {
             style: TextTheme.of(context).titleMedium!.semiBold.colorPrimary(context),
           ),
         ),
-        SizedBox(height: 12),
         Text(
           'atau',
           style: TextTheme.of(context).bodySmall!.colorOutline(context),
         ),
-        SizedBox(height: 12),
         FilledButton(
           style: FilledButton.styleFrom(
             textStyle: TextTheme.of(context).titleSmall!.semiBold,
@@ -152,30 +154,33 @@ class _ImagePreviewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          width: 1.5,
-          color: ColorScheme.of(context).surface,
-          strokeAlign: BorderSide.strokeAlignOutside,
+    return Hero(
+      tag: imageBytes,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            width: 1.5,
+            color: ColorScheme.of(context).outlineVariant,
+            strokeAlign: BorderSide.strokeAlignOutside,
+          ),
+          image: DecorationImage(
+            image: MemoryImage(imageBytes),
+            fit: BoxFit.cover,
+          ),
         ),
-        image: DecorationImage(
-          image: MemoryImage(imageBytes),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: Padding(
-        padding: EdgeInsets.only(bottom: 16),
-        child: Align(
-          alignment: Alignment.bottomCenter,
-          child: FilledButton.tonalIcon(
-            icon: Icon(Icons.delete_outline_rounded),
-            label: Text('Hapus'),
-            style: FilledButton.styleFrom(
-              textStyle: TextTheme.of(context).titleSmall!.semiBold,
+        child: Padding(
+          padding: EdgeInsets.only(bottom: 16),
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: FilledButton.tonalIcon(
+              icon: Icon(Icons.delete_outline_rounded),
+              label: Text('Hapus'),
+              style: FilledButton.styleFrom(
+                textStyle: TextTheme.of(context).titleSmall!.semiBold,
+              ),
+              onPressed: () => context.read<HomeProvider>().setImageBytes(null),
             ),
-            onPressed: () => context.read<HomeProvider>().setImageBytes(null),
           ),
         ),
       ),

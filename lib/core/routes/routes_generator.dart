@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 // Project imports:
 import 'package:food_recognizer/core/routes/route_names.dart';
 import 'package:food_recognizer/src/services/image_service.dart';
+import 'package:food_recognizer/src/ui/pages/detail_page.dart';
 import 'package:food_recognizer/src/ui/pages/home_page.dart';
 import 'package:food_recognizer/src/ui/pages/live_camera_page.dart';
 import 'package:food_recognizer/src/ui/pages/result_page.dart';
@@ -16,8 +17,6 @@ import 'package:food_recognizer/src/ui/providers/home_provider.dart';
 Route<dynamic>? generateAppRoutes(RouteSettings settings) {
   switch (settings.name) {
     case Routes.home:
-      // final args = settings.arguments as Map<String, dynamic>;
-
       return MaterialPageRoute(
         builder: (context) => ChangeNotifierProvider(
           create: (context) => HomeProvider(
@@ -27,16 +26,24 @@ Route<dynamic>? generateAppRoutes(RouteSettings settings) {
         ),
       );
     case Routes.result:
+      final args = settings.arguments as Map<String, dynamic>;
+
       return MaterialPageRoute(
-        builder: (context) => ResultPage(),
+        builder: (_) => ResultPage(
+          imageBytes: args['imageBytes'],
+        ),
       );
     case Routes.detail:
+      final args = settings.arguments as Map<String, dynamic>;
+
       return MaterialPageRoute(
-        builder: (context) => Placeholder(),
+        builder: (_) => DetailPage(
+          meal: args['meal'],
+        ),
       );
     case Routes.liveCamera:
       return MaterialPageRoute(
-        builder: (context) => LiveCameraPage(),
+        builder: (_) => LiveCameraPage(),
       );
     default:
       return null;

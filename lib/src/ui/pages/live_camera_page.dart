@@ -58,6 +58,7 @@ class _LiveCameraBodyState extends State<_LiveCameraBody> {
     return ColoredBox(
       color: ColorScheme.of(context).onSurface,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
             child: CameraView(
@@ -68,19 +69,16 @@ class _LiveCameraBodyState extends State<_LiveCameraBody> {
           ),
           Container(
             padding: EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: ColorScheme.of(context).surface,
-            ),
+            color: ColorScheme.of(context).surface,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              spacing: 8,
               children: [
                 Expanded(
                   child: AnalyzingLabel(),
                 ),
-                SizedBox(width: 8),
                 Text(
                   '00.00%',
-                  style: TextTheme.of(context).bodyMedium!.medium.colorOnSurfaceVariant(context),
+                  style: TextTheme.of(context).titleSmall!.medium,
                 ),
               ],
             ),

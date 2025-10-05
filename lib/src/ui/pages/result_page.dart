@@ -1,18 +1,27 @@
+// Dart imports:
+import 'dart:typed_data' show Uint8List;
+
 // Flutter imports:
 import 'package:flutter/material.dart';
 
 // Project imports:
 import 'package:food_recognizer/core/extensions/text_style_extension.dart';
+import 'package:food_recognizer/src/models/nutrition.dart';
 import 'package:food_recognizer/src/ui/widget/scaffold_safe_area.dart';
 
 class ResultPage extends StatelessWidget {
-  const ResultPage({super.key});
+  final Uint8List imageBytes;
+
+  const ResultPage({
+    super.key,
+    required this.imageBytes,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ScaffoldSafeArea(
       appBar: _ResultAppBar(),
-      body: _ResultBody(),
+      body: _ResultBody(imageBytes),
     );
   }
 }
@@ -24,7 +33,7 @@ class _ResultAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: ColorScheme.of(context).inversePrimary,
-      title: Text('Hasil Analisa'),
+      title: Text('Hasil Analisis'),
       titleTextStyle: TextTheme.of(context).titleLarge!.semiBold.colorOnSurface(context),
       titleSpacing: 0,
     );
@@ -35,7 +44,9 @@ class _ResultAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class _ResultBody extends StatefulWidget {
-  const _ResultBody();
+  final Uint8List imageBytes;
+
+  const _ResultBody(this.imageBytes);
 
   @override
   State<_ResultBody> createState() => _ResultBodyState();
@@ -53,24 +64,89 @@ class _ResultBodyState extends State<_ResultBody> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      spacing: 8,
-      children: [
-        Expanded(
-          child: Center(
-            child: Image.network(
-              "https://github.com/dicodingacademy/assets/raw/refs/heads/main/flutter_ml/assets/nasi-lemak.jpg",
-              fit: BoxFit.cover,
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Hero(
+            tag: widget.imageBytes,
+            child: Container(
+              width: MediaQuery.widthOf(context),
+              height: MediaQuery.widthOf(context) - 56,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  width: 1.5,
+                  color: ColorScheme.of(context).outlineVariant,
+                  strokeAlign: BorderSide.strokeAlignOutside,
+                ),
+                image: DecorationImage(
+                  image: MemoryImage(widget.imageBytes),
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
           ),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 16.0),
-          // todo-03: show the inference result (food name and the confidence score)
-          child: Row(),
-        ),
-      ],
+          SizedBox(height: 20),
+          Row(
+            spacing: 8,
+            children: [
+              Expanded(
+                child: Text(
+                  'Nasi Lemak',
+                  style: TextTheme.of(context).titleLarge!.bold,
+                ),
+              ),
+              Text(
+                '00.00%',
+                style: TextTheme.of(context).titleSmall!.medium,
+              ),
+            ],
+          ),
+          Divider(height: 32),
+          Text(
+            'Informasi Nilai Gizi',
+            style: TextTheme.of(context).titleMedium!.semiBold,
+          ),
+          Divider(height: 32),
+          ...List<Padding>.generate(
+            dummyNutritions.length,
+            (index) => Padding(
+              padding: EdgeInsets.only(bottom: 2),
+              child: Row(
+                spacing: 8,
+                children: [
+                  Expanded(
+                    child: Text(
+                      dummyNutritions[index].name,
+                      style: TextTheme.of(context).bodyMedium!.medium.colorOutline(context),
+                    ),
+                  ),
+                  Text(
+                    '${dummyNutritions[index].value} ${dummyNutritions[index].unit}',
+                    style: TextTheme.of(context).bodyMedium!.medium.colorOutline(context),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(height: 20),
+          Text(
+            'Referensi Serupa',
+            style: TextTheme.of(context).titleMedium!.semiBold,
+          ),
+          Divider(height: 32),
+          // TODO:
+          // FoodReferenceTile(
+          //   meal: meal,
+          //   onTap: () => navigatorKey.currentState!.pushNamed(
+          //     Routes.detail,
+          //     arguments: {'meal': meal},
+          //   ),
+          // ),
+        ],
+      ),
     );
   }
 }

@@ -10,7 +10,10 @@ import 'package:camera/camera.dart';
 class CameraView extends StatefulWidget {
   final Function(CameraImage cameraImage)? onImage;
 
-  const CameraView({super.key, this.onImage});
+  const CameraView({
+    super.key,
+    this.onImage,
+  });
 
   @override
   State<CameraView> createState() => _CameraViewState();
@@ -127,7 +130,9 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
             child: SizedBox(
               width: 48,
               height: 48,
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                strokeCap: StrokeCap.round,
+              ),
             ),
           );
   }
