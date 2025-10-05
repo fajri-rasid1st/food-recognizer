@@ -10,10 +10,7 @@ import 'package:camera/camera.dart';
 class CameraView extends StatefulWidget {
   final Function(CameraImage cameraImage)? onImage;
 
-  const CameraView({
-    super.key,
-    this.onImage,
-  });
+  const CameraView({super.key, this.onImage});
 
   @override
   State<CameraView> createState() => _CameraViewState();
@@ -78,23 +75,24 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
               Positioned(
                 left: 0,
                 right: 0,
-                bottom: 48,
+                bottom: 45,
                 child: Wrap(
-                  spacing: 12,
-                  runSpacing: 12,
+                  spacing: 16,
+                  runSpacing: 16,
                   alignment: WrapAlignment.center,
                   runAlignment: WrapAlignment.center,
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
-                    _FlashlightButton(
+                    _FlashLightButton(
+                      enabled: _isRearCamera,
                       value: _isFlashOn,
                       onChanged: (value) => setState(() {
                         _isFlashOn = value;
 
                         if (_isFlashOn) {
-                          controller!.setFlashMode(FlashMode.torch);
+                          controller?.setFlashMode(FlashMode.torch);
                         } else {
-                          controller!.setFlashMode(FlashMode.off);
+                          controller?.setFlashMode(FlashMode.off);
                         }
                       }),
                     ),
@@ -111,7 +109,13 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
                           return camera.lensDirection == CameraLensDirection.front;
                         });
 
-                        controller!.setDescription(cameraDescription);
+                        controller?.setDescription(cameraDescription);
+
+                        if (!_isRearCamera) {
+                          _isFlashOn = false;
+
+                          controller?.setFlashMode(FlashMode.off);
+                        }
                       }),
                     ),
                   ],
@@ -181,15 +185,18 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
     if (widget.onImage != null) {
       await widget.onImage!(image);
     }
+
     _isProcessing = false;
   }
 }
 
-class _FlashlightButton extends StatelessWidget {
+class _FlashLightButton extends StatelessWidget {
+  final bool enabled;
   final bool value;
   final ValueChanged<bool> onChanged;
 
-  const _FlashlightButton({
+  const _FlashLightButton({
+    this.enabled = true,
     required this.value,
     required this.onChanged,
   });
@@ -197,7 +204,7 @@ class _FlashlightButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-      heroTag: 'flashlight_button',
+      heroTag: 'flash_light_button',
       elevation: 0,
       focusElevation: 0,
       hoverElevation: 0,
@@ -212,8 +219,8 @@ class _FlashlightButton extends StatelessWidget {
         ),
       ),
       tooltip: 'Flash',
-      onPressed: () => onChanged.call(!value),
-      child: Icon(value ? Icons.flash_on : Icons.flash_off),
+      onPressed: enabled ? () => onChanged(!value) : null,
+      child: Icon(value && enabled ? Icons.flash_on : Icons.flash_off),
     );
   }
 }
@@ -245,7 +252,7 @@ class _SwitchCameraButton extends StatelessWidget {
         ),
       ),
       tooltip: 'Switch',
-      onPressed: () => onChanged.call(!value),
+      onPressed: () => onChanged(!value),
       child: Icon(Icons.sync),
     );
   }

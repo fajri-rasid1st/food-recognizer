@@ -8,7 +8,6 @@ import 'package:food_recognizer/app.dart';
 // Package imports:
 // import 'package:provider/provider.dart';
 
-
 void main() {
   // Memastikan widget Flutter sudah diinisialisasi
   WidgetsFlutterBinding.ensureInitialized();

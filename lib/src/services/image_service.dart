@@ -21,6 +21,7 @@ class ImageService {
 
     final image = await imagePicker.pickImage(
       source: source,
+      imageQuality: 80,
     );
 
     return image;
@@ -37,8 +38,8 @@ class ImageService {
     final croppedImage = await imageCropper.cropImage(
       sourcePath: imagePath,
       aspectRatio: aspectRatio,
-      maxWidth: 500,
-      maxHeight: 500,
+      maxWidth: 800,
+      maxHeight: 800,
       compressQuality: 80,
       uiSettings: [
         AndroidUiSettings(

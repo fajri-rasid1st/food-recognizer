@@ -39,8 +39,8 @@ class _HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           icon: Icon(Icons.linked_camera_outlined),
           iconSize: 28,
           color: ColorScheme.of(context).onSurface,
+          tooltip: 'Live Food Recognizer',
           onPressed: () => navigatorKey.currentState!.pushNamed(Routes.liveCamera),
-          tooltip: 'Live Recognizer',
         ),
       ],
     );
@@ -63,56 +63,55 @@ class _HomeBody extends StatelessWidget {
         children: [
           Expanded(
             child: Center(
-              child: Align(
-                child: DottedBorder(
-                  options: RoundedRectDottedBorderOptions(
-                    radius: Radius.circular(16),
-                    dashPattern: [5, 5],
-                    strokeWidth: 1.5,
-                    strokeCap: StrokeCap.round,
-                    color: ColorScheme.of(context).outlineVariant,
-                  ),
-                  child: SizedBox(
-                    width: MediaQuery.widthOf(context) - 80,
-                    height: MediaQuery.widthOf(context) - 80,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        FloatingActionButton.large(
-                          elevation: 0,
-                          focusElevation: 0,
-                          hoverElevation: 0,
-                          disabledElevation: 0,
-                          highlightElevation: 0,
-                          foregroundColor: ColorScheme.of(context).outline,
-                          backgroundColor: ColorScheme.of(context).surfaceContainer,
-                          shape: CircleBorder(),
-                          onPressed: () => pickImageFile(context, ImageSource.gallery),
-                          child: Icon(Icons.photo_library_outlined),
+              child: DottedBorder(
+                options: RoundedRectDottedBorderOptions(
+                  radius: Radius.circular(16),
+                  dashPattern: [5, 5],
+                  strokeWidth: 1.5,
+                  strokeCap: StrokeCap.round,
+                  color: ColorScheme.of(context).outlineVariant,
+                ),
+                child: SizedBox(
+                  width: MediaQuery.widthOf(context) - 80,
+                  height: MediaQuery.widthOf(context) - 80,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      FloatingActionButton.large(
+                        elevation: 0,
+                        focusElevation: 0,
+                        hoverElevation: 0,
+                        disabledElevation: 0,
+                        highlightElevation: 0,
+                        foregroundColor: ColorScheme.of(context).outline,
+                        backgroundColor: ColorScheme.of(context).surfaceContainer,
+                        shape: CircleBorder(),
+                        onPressed: () => pickImageFile(context, ImageSource.gallery),
+                        child: Icon(Icons.photo_library_outlined),
+                      ),
+                      SizedBox(height: 12),
+                      GestureDetector(
+                        onTap: () => pickImageFile(context, ImageSource.gallery),
+                        child: Text(
+                          'Pilih Gambar',
+                          style: TextTheme.of(context).titleMedium!.semiBold.colorPrimary(context),
                         ),
-                        SizedBox(height: 12),
-                        GestureDetector(
-                          onTap: () => pickImageFile(context, ImageSource.gallery),
-                          child: Text(
-                            'Pilih Gambar',
-                            style: TextTheme.of(context).titleMedium!.semiBold.colorPrimary(context),
-                          ),
+                      ),
+                      SizedBox(height: 12),
+                      Text(
+                        'atau',
+                        style: TextTheme.of(context).bodySmall!.colorOutline(context),
+                      ),
+                      SizedBox(height: 12),
+                      FilledButton(
+                        style: FilledButton.styleFrom(
+                          textStyle: TextTheme.of(context).titleSmall!.semiBold,
                         ),
-                        SizedBox(height: 12),
-                        Text(
-                          'atau',
-                          style: TextTheme.of(context).bodySmall!.colorOutline(context),
-                        ),
-                        SizedBox(height: 12),
-                        FilledButton(
-                          style: FilledButton.styleFrom(
-                            textStyle: TextTheme.of(context).titleSmall!.semiBold,
-                          ),
-                          onPressed: () => pickImageFile(context, ImageSource.camera),
-                          child: Text("Ambil Gambar"),
-                        ),
-                      ],
-                    ),
+                        onPressed: () => pickImageFile(context, ImageSource.camera),
+                        child: Text('Ambil Gambar'),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -123,7 +122,7 @@ class _HomeBody extends StatelessWidget {
               textStyle: TextTheme.of(context).titleSmall!.semiBold,
             ),
             onPressed: () {},
-            child: Text("Analyze"),
+            child: Text('Analyze'),
           ),
         ],
       ),
@@ -150,11 +149,11 @@ class _HomeBody extends StatelessWidget {
       if (croppedImage != null) {
         final imgByte = await croppedImage.readAsBytes();
 
-        debugPrint("fajri from: ${imgByte.length}");
+        debugPrint('fajri before compress: ${imgByte.length}');
 
         final compressImgByte = await ImageService.compressImage(imgByte);
 
-        debugPrint("fajri to: ${compressImgByte.length}");
+        debugPrint('fajri after compress: ${compressImgByte.length}');
       }
     }
   }
