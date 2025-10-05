@@ -1,5 +1,7 @@
+// Dart imports:
+import 'dart:typed_data' show Uint8List;
+
 // Flutter imports:
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -16,7 +18,7 @@ class ImageService {
   factory ImageService() => _instance;
 
   /// To pick image from provided [source]
-  static Future<XFile?> pickImage(ImageSource source) async {
+  Future<XFile?> pickImage(ImageSource source) async {
     final imagePicker = ImagePicker();
 
     final image = await imagePicker.pickImage(
@@ -28,16 +30,20 @@ class ImageService {
   }
 
   /// To crop image after picked from gallery or camera
-  static Future<CroppedFile?> cropImage({
+  Future<CroppedFile?> cropImage({
     required BuildContext context,
     required String imagePath,
-    CropAspectRatio? aspectRatio,
+    double? aspectRatioX,
+    double? aspectRatioY,
   }) async {
     final imageCropper = ImageCropper();
 
     final croppedImage = await imageCropper.cropImage(
       sourcePath: imagePath,
-      aspectRatio: aspectRatio,
+      aspectRatio: CropAspectRatio(
+        ratioX: aspectRatioX ?? 1.0,
+        ratioY: aspectRatioY ?? 1.0,
+      ),
       maxWidth: 800,
       maxHeight: 800,
       compressQuality: 80,
@@ -73,7 +79,7 @@ class ImageService {
   }
 
   /// To compress image after cropped
-  static Future<Uint8List> compressImage(Uint8List bytes, [int maxSizeMb = 1]) async {
+  Future<Uint8List> compressImage(Uint8List bytes, [int maxSizeMb = 1]) async {
     final imageLength = bytes.length;
 
     if (imageLength < (maxSizeMb * 1000000)) return bytes;
@@ -82,19 +88,19 @@ class ImageService {
 
     var compressQuality = 100;
     var length = imageLength;
-    Uint8List newByte;
+    Uint8List newBytes;
 
     do {
       compressQuality -= 10;
 
-      newByte = img.encodeJpg(
+      newBytes = img.encodeJpg(
         image,
         quality: compressQuality,
       );
 
-      length = newByte.length;
+      length = newBytes.length;
     } while (length > (maxSizeMb * 1000000));
 
-    return newByte;
+    return newBytes;
   }
 }

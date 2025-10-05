@@ -75,7 +75,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
               Positioned(
                 left: 0,
                 right: 0,
-                bottom: 45,
+                bottom: 24,
                 child: Wrap(
                   spacing: 16,
                   runSpacing: 16,

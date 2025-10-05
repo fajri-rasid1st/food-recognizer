@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Project imports:
 import 'package:food_recognizer/core/extensions/text_style_extension.dart';
+import 'package:food_recognizer/src/ui/widget/analyzing_label.dart';
 import 'package:food_recognizer/src/ui/widget/camera_view.dart';
 import 'package:food_recognizer/src/ui/widget/scaffold_safe_area.dart';
 
@@ -48,6 +49,7 @@ class _LiveCameraBodyState extends State<_LiveCameraBody> {
   @override
   void dispose() {
     // Future.microtask(() async => await readViewmodel.close());
+
     super.dispose();
   }
 
@@ -55,12 +57,33 @@ class _LiveCameraBodyState extends State<_LiveCameraBody> {
   Widget build(BuildContext context) {
     return ColoredBox(
       color: ColorScheme.of(context).onSurface,
-      child: Stack(
+      child: Column(
         children: [
-          CameraView(
-            onImage: (cameraImage) async {
-              // await readViewmodel.runClassification(cameraImage);
-            },
+          Expanded(
+            child: CameraView(
+              onImage: (cameraImage) async {
+                // await readViewmodel.runClassification(cameraImage);
+              },
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: ColorScheme.of(context).surface,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: AnalyzingLabel(),
+                ),
+                SizedBox(width: 8),
+                Text(
+                  '00.00%',
+                  style: TextTheme.of(context).bodyMedium!.medium.colorOnSurfaceVariant(context),
+                ),
+              ],
+            ),
           ),
           // Positioned(
           //   bottom: 0,

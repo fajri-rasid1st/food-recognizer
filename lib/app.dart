@@ -2,10 +2,10 @@
 import 'package:flutter/material.dart';
 
 // Project imports:
+import 'package:food_recognizer/core/routes/route_names.dart';
 import 'package:food_recognizer/core/routes/routes_generator.dart';
 import 'package:food_recognizer/core/theme/app_theme.dart';
 import 'package:food_recognizer/core/utilities/navigator_key.dart';
-import 'package:food_recognizer/src/ui/pages/home_page.dart';
 
 class FoodRecognizerApp extends StatelessWidget {
   const FoodRecognizerApp({super.key});
@@ -19,7 +19,7 @@ class FoodRecognizerApp extends StatelessWidget {
       darkTheme: darkTheme,
       navigatorKey: navigatorKey,
       onGenerateRoute: generateAppRoutes,
-      home: HomePage(),
+      initialRoute: Routes.home,
     );
   }
 }

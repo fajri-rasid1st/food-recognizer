@@ -2,8 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+// Package imports:
+import 'package:provider/provider.dart';
+
 // Project imports:
 import 'package:food_recognizer/app.dart';
+import 'package:food_recognizer/src/services/image_service.dart';
 
 // Package imports:
 // import 'package:provider/provider.dart';
@@ -18,12 +22,14 @@ void main() {
     DeviceOrientation.portraitDown,
   ]);
 
-  runApp(FoodRecognizerApp());
-
-  // runApp(
-  //   MultiProvider(
-  //     providers: [],
-  //     child: FoodRecognizerApp(),
-  //   ),
-  // );
+  runApp(
+    MultiProvider(
+      providers: [
+        Provider(
+          create: (_) => ImageService(),
+        ),
+      ],
+      child: FoodRecognizerApp(),
+    ),
+  );
 }

@@ -1,16 +1,19 @@
+// Dart imports:
+import 'dart:typed_data' show Uint8List;
+
 // Flutter imports:
 import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:dotted_border/dotted_border.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 // Project imports:
 import 'package:food_recognizer/core/extensions/text_style_extension.dart';
 import 'package:food_recognizer/core/routes/route_names.dart';
 import 'package:food_recognizer/core/utilities/navigator_key.dart';
-import 'package:food_recognizer/src/services/image_service.dart';
+import 'package:food_recognizer/src/ui/providers/home_provider.dart';
 import 'package:food_recognizer/src/ui/widget/scaffold_safe_area.dart';
 
 class HomePage extends StatelessWidget {
@@ -55,6 +58,8 @@ class _HomeBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final imageBytes = context.select<HomeProvider, Uint8List?>((provider) => provider.imageBytes);
+
     return Padding(
       padding: EdgeInsets.all(20),
       child: Column(
@@ -65,6 +70,7 @@ class _HomeBody extends StatelessWidget {
             child: Center(
               child: DottedBorder(
                 options: RoundedRectDottedBorderOptions(
+                  padding: EdgeInsets.zero,
                   radius: Radius.circular(16),
                   dashPattern: [5, 5],
                   strokeWidth: 1.5,
@@ -72,47 +78,9 @@ class _HomeBody extends StatelessWidget {
                   color: ColorScheme.of(context).outlineVariant,
                 ),
                 child: SizedBox(
-                  width: MediaQuery.widthOf(context) - 80,
-                  height: MediaQuery.widthOf(context) - 80,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      FloatingActionButton.large(
-                        elevation: 0,
-                        focusElevation: 0,
-                        hoverElevation: 0,
-                        disabledElevation: 0,
-                        highlightElevation: 0,
-                        foregroundColor: ColorScheme.of(context).outline,
-                        backgroundColor: ColorScheme.of(context).surfaceContainer,
-                        shape: CircleBorder(),
-                        onPressed: () => pickImageFile(context, ImageSource.gallery),
-                        child: Icon(Icons.photo_library_outlined),
-                      ),
-                      SizedBox(height: 12),
-                      GestureDetector(
-                        onTap: () => pickImageFile(context, ImageSource.gallery),
-                        child: Text(
-                          'Pilih Gambar',
-                          style: TextTheme.of(context).titleMedium!.semiBold.colorPrimary(context),
-                        ),
-                      ),
-                      SizedBox(height: 12),
-                      Text(
-                        'atau',
-                        style: TextTheme.of(context).bodySmall!.colorOutline(context),
-                      ),
-                      SizedBox(height: 12),
-                      FilledButton(
-                        style: FilledButton.styleFrom(
-                          textStyle: TextTheme.of(context).titleSmall!.semiBold,
-                        ),
-                        onPressed: () => pickImageFile(context, ImageSource.camera),
-                        child: Text('Ambil Gambar'),
-                      ),
-                    ],
-                  ),
+                  width: MediaQuery.widthOf(context) - 56,
+                  height: MediaQuery.widthOf(context) - 56,
+                  child: imageBytes != null ? _ImagePreviewWidget(imageBytes) : _ImagePickerWidget(),
                 ),
               ),
             ),
@@ -121,40 +89,96 @@ class _HomeBody extends StatelessWidget {
             style: FilledButton.styleFrom(
               textStyle: TextTheme.of(context).titleSmall!.semiBold,
             ),
-            onPressed: () {},
+            onPressed: imageBytes != null ? () => navigatorKey.currentState!.pushNamed(Routes.result) : null,
             child: Text('Analyze'),
           ),
         ],
       ),
     );
   }
+}
 
-  Future<void> pickImageFile(
-    BuildContext context,
-    ImageSource source,
-  ) async {
-    final imageFile = await ImageService.pickImage(source);
+class _ImagePickerWidget extends StatelessWidget {
+  const _ImagePickerWidget();
 
-    if (imageFile != null) {
-      if (!context.mounted) return;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        FloatingActionButton.large(
+          elevation: 0,
+          focusElevation: 0,
+          hoverElevation: 0,
+          disabledElevation: 0,
+          highlightElevation: 0,
+          foregroundColor: ColorScheme.of(context).outline,
+          backgroundColor: ColorScheme.of(context).surfaceContainer,
+          shape: CircleBorder(),
+          onPressed: () => context.read<HomeProvider>().pickImageFile(context, ImageSource.gallery),
+          child: Icon(Icons.photo_library_outlined),
+        ),
+        SizedBox(height: 12),
+        GestureDetector(
+          onTap: () => context.read<HomeProvider>().pickImageFile(context, ImageSource.gallery),
+          child: Text(
+            'Pilih Gambar',
+            style: TextTheme.of(context).titleMedium!.semiBold.colorPrimary(context),
+          ),
+        ),
+        SizedBox(height: 12),
+        Text(
+          'atau',
+          style: TextTheme.of(context).bodySmall!.colorOutline(context),
+        ),
+        SizedBox(height: 12),
+        FilledButton(
+          style: FilledButton.styleFrom(
+            textStyle: TextTheme.of(context).titleSmall!.semiBold,
+          ),
+          onPressed: () => context.read<HomeProvider>().pickImageFile(context, ImageSource.camera),
+          child: Text('Ambil Gambar'),
+        ),
+      ],
+    );
+  }
+}
 
-      final croppedImage = await ImageService.cropImage(
-        context: context,
-        imagePath: imageFile.path,
-        aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
-      );
+class _ImagePreviewWidget extends StatelessWidget {
+  final Uint8List imageBytes;
 
-      if (!context.mounted) return;
+  const _ImagePreviewWidget(this.imageBytes);
 
-      if (croppedImage != null) {
-        final imgByte = await croppedImage.readAsBytes();
-
-        debugPrint('fajri before compress: ${imgByte.length}');
-
-        final compressImgByte = await ImageService.compressImage(imgByte);
-
-        debugPrint('fajri after compress: ${compressImgByte.length}');
-      }
-    }
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          width: 1.5,
+          color: ColorScheme.of(context).surface,
+          strokeAlign: BorderSide.strokeAlignOutside,
+        ),
+        image: DecorationImage(
+          image: MemoryImage(imageBytes),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Padding(
+        padding: EdgeInsets.only(bottom: 16),
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: FilledButton.tonalIcon(
+            icon: Icon(Icons.delete_outline_rounded),
+            label: Text('Hapus'),
+            style: FilledButton.styleFrom(
+              textStyle: TextTheme.of(context).titleSmall!.semiBold,
+            ),
+            onPressed: () => context.read<HomeProvider>().setImageBytes(null),
+          ),
+        ),
+      ),
+    );
   }
 }
