@@ -10,16 +10,15 @@ import 'package:image_picker/image_picker.dart';
 // Project imports:
 import 'package:food_recognizer/src/services/image_service.dart';
 
-class HomeProvider extends ChangeNotifier {
+class ImagePickerProvider extends ChangeNotifier {
   final ImageService _imageService;
 
-  HomeProvider(this._imageService);
+  ImagePickerProvider(this._imageService);
 
   Uint8List? imageBytes;
 
   void setImageBytes(Uint8List? bytes) {
     imageBytes = bytes;
-
     notifyListeners();
   }
 
@@ -33,8 +32,6 @@ class HomeProvider extends ChangeNotifier {
         context: context,
         imagePath: imageFile.path,
       );
-
-      if (!context.mounted) return;
 
       if (croppedImage != null) {
         final imgBytes = await croppedImage.readAsBytes();

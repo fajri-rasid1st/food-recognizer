@@ -4,9 +4,17 @@ import 'dart:typed_data' show Uint8List;
 // Flutter imports:
 import 'package:flutter/material.dart';
 
+// Package imports:
+import 'package:provider/provider.dart';
+
 // Project imports:
+import 'package:food_recognizer/core/enums/result_state.dart';
 import 'package:food_recognizer/core/extensions/text_style_extension.dart';
+import 'package:food_recognizer/core/routes/route_names.dart';
+import 'package:food_recognizer/core/utilities/navigator_key.dart';
 import 'package:food_recognizer/src/models/nutrition.dart';
+import 'package:food_recognizer/src/ui/providers/meal_api_provider.dart';
+import 'package:food_recognizer/src/ui/widget/food_reference_tile.dart';
 import 'package:food_recognizer/src/ui/widget/scaffold_safe_area.dart';
 
 class ResultPage extends StatelessWidget {
@@ -59,6 +67,9 @@ class _ResultBodyState extends State<_ResultBody> {
 
     Future.microtask(() {
       // todo-02: run the inference model based on user picture
+      if (!mounted) return;
+
+      context.read<MealApiProvider>().getMeals('burger');
     });
   }
 
@@ -133,18 +144,52 @@ class _ResultBodyState extends State<_ResultBody> {
           ),
           SizedBox(height: 20),
           Text(
-            'Referensi Serupa',
+            'Referensi Makanan Serupa',
             style: TextTheme.of(context).titleMedium!.semiBold,
           ),
           Divider(height: 32),
-          // TODO:
-          // FoodReferenceTile(
-          //   meal: meal,
-          //   onTap: () => navigatorKey.currentState!.pushNamed(
-          //     Routes.detail,
-          //     arguments: {'meal': meal},
-          //   ),
-          // ),
+          Consumer<MealApiProvider>(
+            builder: (context, provider, child) {
+              switch (provider.state) {
+                case ResultState.loading:
+                  return Center(
+                    child: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: CircularProgressIndicator(
+                        strokeCap: StrokeCap.round,
+                      ),
+                    ),
+                  );
+                case ResultState.error:
+                  return Center(
+                    child: Text(
+                      provider.message,
+                      textAlign: TextAlign.center,
+                      style: TextTheme.of(context).bodyMedium!.medium.colorOutline(context),
+                    ),
+                  );
+                case ResultState.data:
+                  return Column(
+                    spacing: 16,
+                    children: List<FoodReferenceTile>.generate(
+                      provider.meals.length,
+                      (index) {
+                        final meal = provider.meals[index];
+
+                        return FoodReferenceTile(
+                          meal: meal,
+                          onTap: () => navigatorKey.currentState!.pushNamed(
+                            Routes.detail,
+                            arguments: {'meal': meal},
+                          ),
+                        );
+                      },
+                    ),
+                  );
+              }
+            },
+          ),
         ],
       ),
     );

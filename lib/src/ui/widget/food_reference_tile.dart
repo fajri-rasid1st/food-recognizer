@@ -55,6 +55,8 @@ class FoodReferenceTile extends StatelessWidget {
                 children: [
                   Text(
                     '${meal.strMeal}',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     style: TextTheme.of(context).titleMedium!.bold,
                   ),
                 ],

@@ -128,8 +128,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
           )
         : Center(
             child: SizedBox(
-              width: 48,
-              height: 48,
+              width: 40,
+              height: 40,
               child: CircularProgressIndicator(
                 strokeCap: StrokeCap.round,
               ),

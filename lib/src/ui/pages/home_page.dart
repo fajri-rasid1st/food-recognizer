@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 import 'package:food_recognizer/core/extensions/text_style_extension.dart';
 import 'package:food_recognizer/core/routes/route_names.dart';
 import 'package:food_recognizer/core/utilities/navigator_key.dart';
-import 'package:food_recognizer/src/ui/providers/home_provider.dart';
+import 'package:food_recognizer/src/ui/providers/image_picker_provider.dart';
 import 'package:food_recognizer/src/ui/widget/scaffold_safe_area.dart';
 
 class HomePage extends StatelessWidget {
@@ -58,7 +58,7 @@ class _HomeBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imageBytes = context.select<HomeProvider, Uint8List?>((provider) => provider.imageBytes);
+    final imageBytes = context.select<ImagePickerProvider, Uint8List?>((provider) => provider.imageBytes);
 
     return Padding(
       padding: EdgeInsets.all(20),
@@ -121,11 +121,11 @@ class _ImagePickerWidget extends StatelessWidget {
           foregroundColor: ColorScheme.of(context).outline,
           backgroundColor: ColorScheme.of(context).surfaceContainer,
           shape: CircleBorder(),
-          onPressed: () => context.read<HomeProvider>().pickImageFile(context, ImageSource.gallery),
+          onPressed: () => context.read<ImagePickerProvider>().pickImageFile(context, ImageSource.gallery),
           child: Icon(Icons.photo_library_outlined),
         ),
         GestureDetector(
-          onTap: () => context.read<HomeProvider>().pickImageFile(context, ImageSource.gallery),
+          onTap: () => context.read<ImagePickerProvider>().pickImageFile(context, ImageSource.gallery),
           child: Text(
             'Pilih Gambar',
             style: TextTheme.of(context).titleMedium!.semiBold.colorPrimary(context),
@@ -139,7 +139,7 @@ class _ImagePickerWidget extends StatelessWidget {
           style: FilledButton.styleFrom(
             textStyle: TextTheme.of(context).titleSmall!.semiBold,
           ),
-          onPressed: () => context.read<HomeProvider>().pickImageFile(context, ImageSource.camera),
+          onPressed: () => context.read<ImagePickerProvider>().pickImageFile(context, ImageSource.camera),
           child: Text('Ambil Gambar'),
         ),
       ],
@@ -179,7 +179,7 @@ class _ImagePreviewWidget extends StatelessWidget {
               style: FilledButton.styleFrom(
                 textStyle: TextTheme.of(context).titleSmall!.semiBold,
               ),
-              onPressed: () => context.read<HomeProvider>().setImageBytes(null),
+              onPressed: () => context.read<ImagePickerProvider>().setImageBytes(null),
             ),
           ),
         ),

@@ -7,11 +7,13 @@ import 'package:provider/provider.dart';
 // Project imports:
 import 'package:food_recognizer/core/routes/route_names.dart';
 import 'package:food_recognizer/src/services/image_service.dart';
+import 'package:food_recognizer/src/services/meal_api_service.dart';
 import 'package:food_recognizer/src/ui/pages/detail_page.dart';
 import 'package:food_recognizer/src/ui/pages/home_page.dart';
 import 'package:food_recognizer/src/ui/pages/live_camera_page.dart';
 import 'package:food_recognizer/src/ui/pages/result_page.dart';
-import 'package:food_recognizer/src/ui/providers/home_provider.dart';
+import 'package:food_recognizer/src/ui/providers/image_picker_provider.dart';
+import 'package:food_recognizer/src/ui/providers/meal_api_provider.dart';
 
 /// Routes generator
 Route<dynamic>? generateAppRoutes(RouteSettings settings) {
@@ -19,7 +21,7 @@ Route<dynamic>? generateAppRoutes(RouteSettings settings) {
     case Routes.home:
       return MaterialPageRoute(
         builder: (context) => ChangeNotifierProvider(
-          create: (context) => HomeProvider(
+          create: (context) => ImagePickerProvider(
             context.read<ImageService>(),
           ),
           child: HomePage(),
@@ -29,8 +31,13 @@ Route<dynamic>? generateAppRoutes(RouteSettings settings) {
       final args = settings.arguments as Map<String, dynamic>;
 
       return MaterialPageRoute(
-        builder: (_) => ResultPage(
-          imageBytes: args['imageBytes'],
+        builder: (context) => ChangeNotifierProvider(
+          create: (context) => MealApiProvider(
+            context.read<MealApiService>(),
+          ),
+          child: ResultPage(
+            imageBytes: args['imageBytes'],
+          ),
         ),
       );
     case Routes.detail:

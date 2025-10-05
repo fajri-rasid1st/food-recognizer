@@ -14,6 +14,7 @@ class DetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: slicing
     return const Placeholder();
   }
 }

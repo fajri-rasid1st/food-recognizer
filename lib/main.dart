@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 // Project imports:
 import 'package:food_recognizer/app.dart';
 import 'package:food_recognizer/src/services/image_service.dart';
+import 'package:food_recognizer/src/services/meal_api_service.dart';
 
 // Package imports:
 // import 'package:provider/provider.dart';
@@ -27,6 +28,9 @@ void main() {
       providers: [
         Provider(
           create: (_) => ImageService(),
+        ),
+        Provider(
+          create: (_) => MealApiService(),
         ),
       ],
       child: FoodRecognizerApp(),
