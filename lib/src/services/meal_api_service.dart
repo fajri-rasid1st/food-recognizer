@@ -23,7 +23,7 @@ class MealApiService {
   /// Fetch daftar makanan dari **The Meal DB** sesuai [query] yang dimasukkan
   Future<List<Meal>> getMeals(String query) async {
     // Definisikan url
-    final url = '${Const.mealDbBaseUrl}search.php?s=$query';
+    final url = '${kMealDbBaseUrl}search.php?s=$query';
 
     // Parsing url ke bentuk uri
     final uri = Uri.parse(url);
@@ -34,13 +34,18 @@ class MealApiService {
 
       if (response.statusCode == 200) {
         // Parsing string dan kembalikan nilai objek json
-        final results = jsonDecode(response.body);
+        final result = jsonDecode(response.body);
 
         // Cast hasilnya ke bentuk Map, lalu ambil value dari key "meals"
-        final List meals = (results as Map<String, dynamic>)['meals'];
+        final List? meals = (result as Map<String, dynamic>)['meals'];
 
-        // Kembalikan nilai berupa daftar makanan (meal) dari list map di atas
-        return meals.map((meal) => Meal.fromMap(meal)).toList();
+        if (meals != null) {
+          // Kembalikan nilai berupa daftar makanan (meal) dari list map di atas
+          return meals.map((meal) => Meal.fromMap(meal)).toList();
+        }
+
+        // Kembalikan list kosong apabila meals null
+        return [];
       } else {
         // Kembalikan exception error jika gagal
         throw Exception('error code ${response.statusCode}');

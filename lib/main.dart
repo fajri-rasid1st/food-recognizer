@@ -1,16 +1,16 @@
 // Flutter imports:
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:food_recognizer/firebase_options.dart';
-import 'package:food_recognizer/src/services/gemini_service.dart';
 
 // Package imports:
+import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
 import 'package:food_recognizer/app.dart';
-import 'package:food_recognizer/src/services/image_service.dart';
+import 'package:food_recognizer/firebase_options.dart';
+import 'package:food_recognizer/src/services/gemini_service.dart';
+import 'package:food_recognizer/src/services/image_picker_service.dart';
 import 'package:food_recognizer/src/services/meal_api_service.dart';
 
 void main() async {
@@ -31,7 +31,7 @@ void main() async {
     MultiProvider(
       providers: [
         Provider(
-          create: (_) => ImageService(),
+          create: (_) => ImagePickerService(),
         ),
         Provider(
           create: (_) => MealApiService(),

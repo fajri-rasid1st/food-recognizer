@@ -9,13 +9,13 @@ import 'package:image/image.dart' as img;
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
-class ImageService {
+class ImagePickerService {
   // Singleton pattern
-  static final ImageService _instance = ImageService._internal();
+  static final ImagePickerService _instance = ImagePickerService._internal();
 
-  ImageService._internal();
+  ImagePickerService._internal();
 
-  factory ImageService() => _instance;
+  factory ImagePickerService() => _instance;
 
   /// To pick image from provided [source]
   Future<XFile?> pickImage(ImageSource source) async {

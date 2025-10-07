@@ -15,11 +15,6 @@ class MealApiProvider extends ChangeNotifier {
   ResultState state = ResultState.loading;
   String message = '';
 
-  void setMeals(List<Meal> meals) {
-    this.meals = meals;
-    notifyListeners();
-  }
-
   Future<void> getMeals(String query) async {
     state = ResultState.loading;
     notifyListeners();
@@ -29,9 +24,13 @@ class MealApiProvider extends ChangeNotifier {
 
       meals = result;
 
+      if (meals.isEmpty) {
+        message = 'Tidak ditemukan referensi masakan.';
+      }
+
       state = ResultState.data;
     } catch (e) {
-      message = 'Tidak ada referensi makanan serupa';
+      message = 'Terjadi kesalahan.';
 
       state = ResultState.error;
     } finally {

@@ -8,10 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 // Project imports:
-import 'package:food_recognizer/src/services/image_service.dart';
+import 'package:food_recognizer/src/services/image_picker_service.dart';
 
 class ImagePickerProvider extends ChangeNotifier {
-  final ImageService _imageService;
+  final ImagePickerService _imageService;
 
   ImagePickerProvider(this._imageService);
 

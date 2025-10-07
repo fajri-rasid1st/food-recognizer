@@ -12,9 +12,11 @@ import 'package:food_recognizer/core/enums/result_state.dart';
 import 'package:food_recognizer/core/extensions/text_style_extension.dart';
 import 'package:food_recognizer/core/routes/route_names.dart';
 import 'package:food_recognizer/core/utilities/navigator_key.dart';
-import 'package:food_recognizer/src/models/nutrition.dart';
+import 'package:food_recognizer/src/ui/providers/gemini_provider.dart';
 import 'package:food_recognizer/src/ui/providers/meal_api_provider.dart';
 import 'package:food_recognizer/src/ui/widget/food_reference_tile.dart';
+import 'package:food_recognizer/src/ui/widget/response_error_text.dart';
+import 'package:food_recognizer/src/ui/widget/response_loading_indicator.dart';
 import 'package:food_recognizer/src/ui/widget/scaffold_safe_area.dart';
 
 class ResultPage extends StatelessWidget {
@@ -69,7 +71,8 @@ class _ResultBodyState extends State<_ResultBody> {
       // todo-02: run the inference model based on user picture
       if (!mounted) return;
 
-      context.read<MealApiProvider>().getMeals('salad');
+      context.read<MealApiProvider>().getMeals('sushi');
+      context.read<GeminiProvider>().getNutrition('sushi');
     });
   }
 
@@ -105,7 +108,7 @@ class _ResultBodyState extends State<_ResultBody> {
             children: [
               Expanded(
                 child: Text(
-                  'Nasi Lemak',
+                  'Nasi Goreng',
                   style: TextTheme.of(context).titleLarge!.bold,
                 ),
               ),
@@ -115,32 +118,65 @@ class _ResultBodyState extends State<_ResultBody> {
               ),
             ],
           ),
+          Consumer<GeminiProvider>(
+            builder: (context, provider, child) {
+              if (provider.foodNutrient == null) {
+                return SizedBox.shrink();
+              }
+
+              return Padding(
+                padding: EdgeInsets.only(top: 6),
+                child: Text(
+                  provider.foodNutrient!.description,
+                  style: TextTheme.of(context).bodyMedium!.medium.colorOutline(context),
+                ),
+              );
+            },
+          ),
           SizedBox(height: 16),
           Text(
             'Informasi Nilai Gizi',
             style: TextTheme.of(context).titleMedium!.semiBold,
           ),
           Divider(height: 32),
-          ...List<Padding>.generate(
-            dummyNutritions.length,
-            (index) => Padding(
-              padding: EdgeInsets.only(bottom: 4),
-              child: Row(
-                spacing: 8,
-                children: [
-                  Expanded(
-                    child: Text(
-                      dummyNutritions[index].name,
-                      style: TextTheme.of(context).bodyMedium!.medium.colorOutline(context),
+          Consumer<GeminiProvider>(
+            builder: (context, provider, child) {
+              switch (provider.state) {
+                case ResultState.loading:
+                  return ResponseLoadingIndicator();
+                case ResultState.error:
+                  return ResponseErrorText(provider.message);
+                case ResultState.data:
+                  final nutrition = provider.foodNutrient!.nutrition;
+                  final map = nutrition.toMap();
+                  final keys = map.keys.toList();
+                  final labels = ['Kalori', 'Karbohidrat', 'Lemak', 'Serat', 'Protein'];
+
+                  return Column(
+                    children: List<Padding>.generate(
+                      map.length,
+                      (index) => Padding(
+                        padding: EdgeInsets.only(bottom: 4),
+                        child: Row(
+                          spacing: 8,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                labels[index],
+                                style: TextTheme.of(context).bodyMedium!.medium.colorOutline(context),
+                              ),
+                            ),
+                            Text(
+                              '${map[keys[index]]} g',
+                              style: TextTheme.of(context).bodyMedium!.medium.colorOutline(context),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                  Text(
-                    '${dummyNutritions[index].value} ${dummyNutritions[index].unit}',
-                    style: TextTheme.of(context).bodyMedium!.medium.colorOutline(context),
-                  ),
-                ],
-              ),
-            ),
+                  );
+              }
+            },
           ),
           SizedBox(height: 20),
           Text(
@@ -152,24 +188,14 @@ class _ResultBodyState extends State<_ResultBody> {
             builder: (context, provider, child) {
               switch (provider.state) {
                 case ResultState.loading:
-                  return Center(
-                    child: SizedBox(
-                      width: 40,
-                      height: 40,
-                      child: CircularProgressIndicator(
-                        strokeCap: StrokeCap.round,
-                      ),
-                    ),
-                  );
+                  return ResponseLoadingIndicator();
                 case ResultState.error:
-                  return Center(
-                    child: Text(
-                      provider.message,
-                      textAlign: TextAlign.center,
-                      style: TextTheme.of(context).bodyMedium!.medium.colorOutline(context),
-                    ),
-                  );
+                  return ResponseErrorText(provider.message);
                 case ResultState.data:
+                  if (provider.meals.isEmpty) {
+                    return ResponseErrorText(provider.message);
+                  }
+
                   return Column(
                     spacing: 16,
                     children: List<FoodReferenceTile>.generate(
