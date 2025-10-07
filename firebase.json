@@ -1,0 +1,22 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "food-recognizer-app-1559a",
+          "appId": "1:959676745589:android:e8db41ebb5b94605b8753c",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "food-recognizer-app-1559a",
+          "configurations": {
+            "android": "1:959676745589:android:e8db41ebb5b94605b8753c",
+            "ios": "1:959676745589:ios:67995f7a390305cbb8753c"
+          }
+        }
+      }
+    }
+  }
+}
