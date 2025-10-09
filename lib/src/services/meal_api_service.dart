@@ -9,7 +9,6 @@ import 'package:food_recognizer/core/const/const.dart';
 import 'package:food_recognizer/src/models/meal.dart';
 
 class MealApiService {
-  // Singleton pattern
   static final MealApiService _instance = MealApiService._internal();
 
   MealApiService._internal();

@@ -152,7 +152,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
 
     final cameraController = CameraController(
       cameraDescription,
-      ResolutionPreset.high,
+      ResolutionPreset.veryHigh,
       fps: 30,
       enableAudio: false,
       imageFormatGroup: Platform.isAndroid ? ImageFormatGroup.yuv420 : ImageFormatGroup.bgra8888,
