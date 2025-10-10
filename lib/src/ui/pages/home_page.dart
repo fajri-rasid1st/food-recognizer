@@ -12,9 +12,10 @@ import 'package:provider/provider.dart';
 // Project imports:
 import 'package:food_recognizer/core/extensions/text_style_extension.dart';
 import 'package:food_recognizer/core/routes/route_names.dart';
+import 'package:food_recognizer/core/utilities/modal_utils.dart';
 import 'package:food_recognizer/core/utilities/navigator_key.dart';
-import 'package:food_recognizer/src/ui/providers/food_recognizer_provider.dart';
 import 'package:food_recognizer/src/ui/providers/image_picker_provider.dart';
+import 'package:food_recognizer/src/ui/providers/lite_rt_provider.dart';
 import 'package:food_recognizer/src/ui/widget/scaffold_safe_area.dart';
 
 class HomePage extends StatelessWidget {
@@ -40,18 +41,18 @@ class _HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _HomeAppBarState extends State<_HomeAppBar> {
-  late final FoodRecognizerProvider foodRecognizerProvider;
+  late final LiteRtProvider liteRtProvider;
 
   @override
   void initState() {
     super.initState();
 
-    foodRecognizerProvider = context.read<FoodRecognizerProvider>();
+    liteRtProvider = context.read<LiteRtProvider>();
   }
 
   @override
   void dispose() {
-    Future.microtask(() => foodRecognizerProvider.close());
+    Future.microtask(() => liteRtProvider.close());
 
     super.dispose();
   }
@@ -70,7 +71,7 @@ class _HomeAppBarState extends State<_HomeAppBar> {
           tooltip: 'Live Food Recognizer',
           onPressed: () => navigatorKey.currentState!.pushNamed(
             Routes.liveCamera,
-            arguments: {'provider': foodRecognizerProvider},
+            arguments: {'provider': liteRtProvider},
           ),
         ),
       ],
@@ -83,7 +84,13 @@ class _HomeBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imageBytes = context.select<ImagePickerProvider, Uint8List?>((provider) => provider.imageBytes);
+    final imageBytes = context.select<ImagePickerProvider, Uint8List?>(
+      (provider) => provider.imageBytes,
+    );
+
+    final classifications = context.select<LiteRtProvider, Map<String, num>>(
+      (provider) => provider.classifications,
+    );
 
     return Padding(
       padding: EdgeInsets.all(20),
@@ -113,10 +120,14 @@ class _HomeBody extends StatelessWidget {
             style: FilledButton.styleFrom(
               textStyle: TextTheme.of(context).titleSmall!.semiBold,
             ),
-            onPressed: imageBytes != null
+            onPressed: imageBytes != null && classifications.isNotEmpty
                 ? () => navigatorKey.currentState!.pushNamed(
                     Routes.result,
-                    arguments: {'imageBytes': imageBytes},
+                    arguments: {
+                      'imageBytes': imageBytes,
+                      'predictedLabel': classifications.keys.first,
+                      'confidenceScore': classifications.values.first,
+                    },
                   )
                 : null,
             child: Text('Analyze'),
@@ -146,11 +157,11 @@ class _ImagePickerWidget extends StatelessWidget {
           foregroundColor: ColorScheme.of(context).outline,
           backgroundColor: ColorScheme.of(context).surfaceContainer,
           shape: CircleBorder(),
-          onPressed: () => context.read<ImagePickerProvider>().pickImageFile(context, ImageSource.gallery),
+          onPressed: () => pickAndAnalyzeImage(context, ImageSource.gallery),
           child: Icon(Icons.photo_library_outlined),
         ),
         GestureDetector(
-          onTap: () => context.read<ImagePickerProvider>().pickImageFile(context, ImageSource.gallery),
+          onTap: () => pickAndAnalyzeImage(context, ImageSource.gallery),
           child: Text(
             'Pilih Gambar',
             style: TextTheme.of(context).titleMedium!.semiBold.colorPrimary(context),
@@ -164,11 +175,41 @@ class _ImagePickerWidget extends StatelessWidget {
           style: FilledButton.styleFrom(
             textStyle: TextTheme.of(context).titleSmall!.semiBold,
           ),
-          onPressed: () => context.read<ImagePickerProvider>().pickImageFile(context, ImageSource.camera),
+          onPressed: () => pickAndAnalyzeImage(context, ImageSource.camera),
           child: Text('Ambil Gambar'),
         ),
       ],
     );
+  }
+
+  Future<void> pickAndAnalyzeImage(BuildContext context, ImageSource source) async {
+    final imagePickerProvider = context.read<ImagePickerProvider>();
+
+    await imagePickerProvider.pickImageFile(context, source);
+
+    final bytes = imagePickerProvider.imageBytes;
+
+    if (bytes == null || !context.mounted) return;
+
+    final liteRtProvider = context.read<LiteRtProvider>();
+
+    ModalUtils.showLoadingDialog();
+
+    liteRtProvider.runInferenceFromImageBytes(bytes).then((_) {
+      ModalUtils.hideLoadingDialog();
+
+      final classifications = liteRtProvider.classifications;
+
+      if (classifications.isEmpty) {
+        if (!context.mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Gambar yang dimasukkan tidak terdeteksi sebagai makanan.'),
+          ),
+        );
+      }
+    });
   }
 }
 

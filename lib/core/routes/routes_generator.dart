@@ -14,9 +14,9 @@ import 'package:food_recognizer/src/ui/pages/detail_page.dart';
 import 'package:food_recognizer/src/ui/pages/home_page.dart';
 import 'package:food_recognizer/src/ui/pages/live_camera_page.dart';
 import 'package:food_recognizer/src/ui/pages/result_page.dart';
-import 'package:food_recognizer/src/ui/providers/food_recognizer_provider.dart';
 import 'package:food_recognizer/src/ui/providers/gemini_provider.dart';
 import 'package:food_recognizer/src/ui/providers/image_picker_provider.dart';
+import 'package:food_recognizer/src/ui/providers/lite_rt_provider.dart';
 import 'package:food_recognizer/src/ui/providers/meal_api_provider.dart';
 
 /// Routes generator
@@ -32,7 +32,7 @@ Route<dynamic>? generateAppRoutes(RouteSettings settings) {
               ),
             ),
             ChangeNotifierProvider(
-              create: (context) => FoodRecognizerProvider(
+              create: (context) => LiteRtProvider(
                 context.read<LiteRtService>(),
               ),
             ),
@@ -59,6 +59,8 @@ Route<dynamic>? generateAppRoutes(RouteSettings settings) {
           ],
           child: ResultPage(
             imageBytes: args['imageBytes'],
+            predictedLabel: args['predictedLabel'],
+            confidenceScore: args['confidenceScore'],
           ),
         ),
       );
@@ -75,7 +77,7 @@ Route<dynamic>? generateAppRoutes(RouteSettings settings) {
 
       return MaterialPageRoute(
         builder: (context) => ChangeNotifierProvider.value(
-          value: args['provider'] as FoodRecognizerProvider,
+          value: args['provider'] as LiteRtProvider,
           child: LiveCameraPage(),
         ),
       );

@@ -28,7 +28,7 @@ class FoodNutrient {
     };
   }
 
-  factory FoodNutrient.fromJson(String source) => FoodNutrient.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory FoodNutrient.fromJson(String source) => FoodNutrient.fromMap(jsonDecode(source) as Map<String, dynamic>);
 }
 
 class Nutrition {

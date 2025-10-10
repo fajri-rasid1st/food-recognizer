@@ -7,6 +7,7 @@ import 'package:transparent_image/transparent_image.dart';
 // Project imports:
 import 'package:food_recognizer/core/extensions/text_style_extension.dart';
 import 'package:food_recognizer/src/models/meal.dart';
+import 'package:food_recognizer/src/ui/widget/loading_indicator.dart';
 import 'package:food_recognizer/src/ui/widget/scaffold_safe_area.dart';
 
 class DetailPage extends StatelessWidget {
@@ -61,14 +62,8 @@ class _ResultBody extends StatelessWidget {
           Stack(
             alignment: AlignmentDirectional.center,
             children: [
-              Center(
-                child: SizedBox(
-                  width: 100,
-                  height: 100,
-                  child: CircularProgressIndicator(
-                    strokeCap: StrokeCap.round,
-                  ),
-                ),
+              LoadingIndicator(
+                radius: 50,
               ),
               Hero(
                 tag: meal,

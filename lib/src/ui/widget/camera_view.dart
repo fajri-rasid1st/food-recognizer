@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:camera/camera.dart';
 
+// Project imports:
+import 'package:food_recognizer/src/ui/widget/loading_indicator.dart';
+
 class CameraView extends StatefulWidget {
   final Function(CameraImage cameraImage)? onImage;
 
@@ -127,14 +130,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
               ),
             ],
           )
-        : Center(
-            child: SizedBox(
-              width: 40,
-              height: 40,
-              child: CircularProgressIndicator(
-                strokeCap: StrokeCap.round,
-              ),
-            ),
+        : LoadingIndicator(
+            radius: 50,
           );
   }
 

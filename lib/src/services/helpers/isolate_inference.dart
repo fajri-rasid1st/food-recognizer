@@ -1,6 +1,7 @@
 // Dart imports:
 import 'dart:io';
 import 'dart:isolate';
+import 'dart:typed_data' show Uint8List;
 
 // Package imports:
 import 'package:camera/camera.dart';
@@ -38,9 +39,11 @@ class IsolateInference {
 
     await for (final InferenceModel model in port) {
       // Create a [_imagePreProcessing] function and run image pre-processing
-      final cameraImage = model.cameraImage!;
+      final cameraImage = model.cameraImage;
+      final imageBytes = model.imageBytes;
       final inputShape = model.inputShape;
-      final imageMatrix = _imagePreProcessing(cameraImage, inputShape);
+
+      final imageMatrix = _imagePreProcessing(cameraImage, imageBytes, inputShape);
 
       // Run inference
       final input = [imageMatrix];
@@ -63,10 +66,18 @@ class IsolateInference {
   }
 
   static List<List<List<num>>> _imagePreProcessing(
-    CameraImage cameraImage,
+    CameraImage? cameraImage,
+    Uint8List? imageBytes,
     List<int> inputShape,
   ) {
-    final image = ImageUtils.convertCameraImage(cameraImage);
+    assert(
+      (cameraImage == null) != (imageBytes == null),
+      'Exactly one of [cameraImage] or [imageBytes] must be non-null',
+    );
+
+    final image = cameraImage != null
+        ? ImageUtils.convertCameraImage(cameraImage)
+        : ImageUtils.convertJpgImageBytes(imageBytes!);
 
     // Resize original image to match model shape.
     var imageInput = image_lib.copyResize(
@@ -124,13 +135,23 @@ class InferenceModel {
   late SendPort responsePort;
 
   CameraImage? cameraImage;
+  Uint8List? imageBytes;
+
   int interpreterAddress;
   List<String> labels;
   List<int> inputShape;
   List<int> outputShape;
 
-  InferenceModel(
+  InferenceModel.cameraImage(
     this.cameraImage,
+    this.interpreterAddress,
+    this.labels,
+    this.inputShape,
+    this.outputShape,
+  );
+
+  InferenceModel.imageBytes(
+    this.imageBytes,
     this.interpreterAddress,
     this.labels,
     this.inputShape,

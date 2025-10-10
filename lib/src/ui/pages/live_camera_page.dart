@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 // Project imports:
 import 'package:food_recognizer/core/extensions/text_style_extension.dart';
-import 'package:food_recognizer/src/ui/providers/food_recognizer_provider.dart';
+import 'package:food_recognizer/src/ui/providers/lite_rt_provider.dart';
 import 'package:food_recognizer/src/ui/widget/analyzing_label.dart';
 import 'package:food_recognizer/src/ui/widget/camera_view.dart';
 import 'package:food_recognizer/src/ui/widget/scaffold_safe_area.dart';
@@ -50,7 +50,7 @@ class _LiveCameraBody extends StatefulWidget {
 class _LiveCameraBodyState extends State<_LiveCameraBody> {
   @override
   Widget build(BuildContext context) {
-    final foodRecognizerProvider = context.read<FoodRecognizerProvider>();
+    final liteRtProvider = context.read<LiteRtProvider>();
 
     return ColoredBox(
       color: ColorScheme.of(context).onSurface,
@@ -60,16 +60,16 @@ class _LiveCameraBodyState extends State<_LiveCameraBody> {
           Expanded(
             child: CameraView(
               onImage: (cameraImage) async {
-                if (!mounted || foodRecognizerProvider.isDisposed) return;
+                if (!mounted || liteRtProvider.isDisposed) return;
 
-                await foodRecognizerProvider.runInference(cameraImage);
+                await liteRtProvider.runInferenceFromCameraFrame(cameraImage);
               },
             ),
           ),
           Container(
             padding: EdgeInsets.all(20),
             color: ColorScheme.of(context).surface,
-            child: Consumer<FoodRecognizerProvider>(
+            child: Consumer<LiteRtProvider>(
               builder: (context, provider, child) {
                 final classifications = provider.classifications;
 

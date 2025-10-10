@@ -1,9 +1,14 @@
+// Dart imports:
+import 'dart:typed_data' show Uint8List;
+
 // Package imports:
 import 'package:camera/camera.dart';
 import 'package:image/image.dart' as image_lib;
 
 /// ImageUtils
 class ImageUtils {
+  ImageUtils._();
+
   static image_lib.Image? convertCameraImage(CameraImage cameraImage) {
     final imageFormatGroup = cameraImage.format.group;
 
@@ -110,12 +115,20 @@ class ImageUtils {
     return img;
   }
 
+  /// Converts a [CameraImage] in JPEG format to [image_lib.Image] in RGB format
   static image_lib.Image convertJPEGToImage(CameraImage cameraImage) {
     // Extract the bytes from the CameraImage
     final bytes = cameraImage.planes[0].bytes;
 
     // Create a new Image instance from the JPEG bytes
     final image = image_lib.decodeImage(bytes);
+
+    return image!;
+  }
+
+  /// Converts a JPG formatted image to [image_lib.Image] in RGB format
+  static image_lib.Image convertJpgImageBytes(Uint8List bytes) {
+    final image = image_lib.decodeJpg(bytes);
 
     return image!;
   }

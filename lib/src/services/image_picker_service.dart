@@ -20,10 +20,7 @@ class ImagePickerService {
   Future<XFile?> pickImage(ImageSource source) async {
     final imagePicker = ImagePicker();
 
-    final image = await imagePicker.pickImage(
-      source: source,
-      imageQuality: 80,
-    );
+    final image = await imagePicker.pickImage(source: source);
 
     return image;
   }
@@ -43,9 +40,8 @@ class ImagePickerService {
         ratioX: aspectRatioX ?? 1.0,
         ratioY: aspectRatioY ?? 1.0,
       ),
-      maxWidth: 800,
-      maxHeight: 800,
-      compressQuality: 80,
+      maxWidth: 1080,
+      maxHeight: 1080,
       uiSettings: [
         AndroidUiSettings(
           toolbarTitle: 'Crop Gambar',

@@ -7,6 +7,7 @@ import 'package:transparent_image/transparent_image.dart';
 // Project imports:
 import 'package:food_recognizer/core/extensions/text_style_extension.dart';
 import 'package:food_recognizer/src/models/meal.dart';
+import 'package:food_recognizer/src/ui/widget/loading_indicator.dart';
 
 class FoodReferenceTile extends StatelessWidget {
   final Meal meal;
@@ -28,14 +29,8 @@ class FoodReferenceTile extends StatelessWidget {
             Stack(
               alignment: AlignmentDirectional.center,
               children: [
-                Center(
-                  child: SizedBox(
-                    width: 40,
-                    height: 40,
-                    child: CircularProgressIndicator(
-                      strokeCap: StrokeCap.round,
-                    ),
-                  ),
+                LoadingIndicator(
+                  radius: 16,
                 ),
                 ClipRRect(
                   borderRadius: BorderRadiusGeometry.circular(8),

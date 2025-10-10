@@ -74,8 +74,27 @@ class LiteRtService {
   }
 
   Future<Map<String, double>> inferenceCameraFrame(CameraImage cameraImage) async {
-    final model = InferenceModel(
+    final model = InferenceModel.cameraImage(
       cameraImage,
+      interpreter.address,
+      labels,
+      inputTensor.shape,
+      outputTensor.shape,
+    );
+
+    final responsePort = ReceivePort();
+
+    isolateInference.sendPort.send(model..responsePort = responsePort.sendPort);
+
+    // Get inference result
+    final results = await responsePort.first;
+
+    return results;
+  }
+
+  Future<Map<String, double>> inferenceImageBytes(Uint8List bytes) async {
+    final model = InferenceModel.imageBytes(
+      bytes,
       interpreter.address,
       labels,
       inputTensor.shape,

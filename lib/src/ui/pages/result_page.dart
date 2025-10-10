@@ -14,24 +14,32 @@ import 'package:food_recognizer/core/routes/route_names.dart';
 import 'package:food_recognizer/core/utilities/navigator_key.dart';
 import 'package:food_recognizer/src/ui/providers/gemini_provider.dart';
 import 'package:food_recognizer/src/ui/providers/meal_api_provider.dart';
+import 'package:food_recognizer/src/ui/widget/error_text.dart';
 import 'package:food_recognizer/src/ui/widget/food_reference_tile.dart';
-import 'package:food_recognizer/src/ui/widget/response_error_text.dart';
-import 'package:food_recognizer/src/ui/widget/response_loading_indicator.dart';
+import 'package:food_recognizer/src/ui/widget/loading_indicator.dart';
 import 'package:food_recognizer/src/ui/widget/scaffold_safe_area.dart';
 
 class ResultPage extends StatelessWidget {
   final Uint8List imageBytes;
+  final String predictedLabel;
+  final num confidenceScore;
 
   const ResultPage({
     super.key,
     required this.imageBytes,
+    required this.predictedLabel,
+    required this.confidenceScore,
   });
 
   @override
   Widget build(BuildContext context) {
     return ScaffoldSafeArea(
       appBar: _ResultAppBar(),
-      body: _ResultBody(imageBytes),
+      body: _ResultBody(
+        imageBytes,
+        predictedLabel,
+        confidenceScore,
+      ),
     );
   }
 }
@@ -55,8 +63,14 @@ class _ResultAppBar extends StatelessWidget implements PreferredSizeWidget {
 
 class _ResultBody extends StatefulWidget {
   final Uint8List imageBytes;
+  final String predictedLabel;
+  final num confidenceScore;
 
-  const _ResultBody(this.imageBytes);
+  const _ResultBody(
+    this.imageBytes,
+    this.predictedLabel,
+    this.confidenceScore,
+  );
 
   @override
   State<_ResultBody> createState() => _ResultBodyState();
@@ -68,11 +82,10 @@ class _ResultBodyState extends State<_ResultBody> {
     super.initState();
 
     Future.microtask(() {
-      // todo-02: run the inference model based on user picture
       if (!mounted) return;
 
-      context.read<MealApiProvider>().getMeals('sushi');
-      context.read<GeminiProvider>().getNutrition('sushi');
+      context.read<MealApiProvider>().getMeals(widget.predictedLabel);
+      context.read<GeminiProvider>().getNutrition(widget.predictedLabel);
     });
   }
 
@@ -108,12 +121,12 @@ class _ResultBodyState extends State<_ResultBody> {
             children: [
               Expanded(
                 child: Text(
-                  'Nasi Goreng',
+                  widget.predictedLabel,
                   style: TextTheme.of(context).titleLarge!.bold,
                 ),
               ),
               Text(
-                '00.00%',
+                '${(widget.confidenceScore * 100).toStringAsFixed(1)}%',
                 style: TextTheme.of(context).titleSmall!.medium,
               ),
             ],
@@ -143,9 +156,9 @@ class _ResultBodyState extends State<_ResultBody> {
             builder: (context, provider, child) {
               switch (provider.state) {
                 case ResultState.loading:
-                  return ResponseLoadingIndicator();
+                  return LoadingIndicator(radius: 20);
                 case ResultState.error:
-                  return ResponseErrorText(provider.message);
+                  return ErrorText(provider.message);
                 case ResultState.data:
                   final nutrition = provider.foodNutrient!.nutrition;
                   final map = nutrition.toMap();
@@ -188,12 +201,12 @@ class _ResultBodyState extends State<_ResultBody> {
             builder: (context, provider, child) {
               switch (provider.state) {
                 case ResultState.loading:
-                  return ResponseLoadingIndicator();
+                  return LoadingIndicator(radius: 20);
                 case ResultState.error:
-                  return ResponseErrorText(provider.message);
+                  return ErrorText(provider.message);
                 case ResultState.data:
                   if (provider.meals.isEmpty) {
-                    return ResponseErrorText(provider.message);
+                    return ErrorText(provider.message);
                   }
 
                   return Column(
