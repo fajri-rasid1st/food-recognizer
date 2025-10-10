@@ -9,8 +9,10 @@ import 'package:provider/provider.dart';
 // Project imports:
 import 'package:food_recognizer/app.dart';
 import 'package:food_recognizer/firebase_options.dart';
+import 'package:food_recognizer/src/services/firebase_ml_service.dart';
 import 'package:food_recognizer/src/services/gemini_service.dart';
 import 'package:food_recognizer/src/services/image_picker_service.dart';
+import 'package:food_recognizer/src/services/lite_rt_service.dart';
 import 'package:food_recognizer/src/services/meal_api_service.dart';
 
 void main() async {
@@ -38,6 +40,14 @@ void main() async {
         ),
         Provider(
           create: (_) => GeminiService(),
+        ),
+        Provider(
+          create: (_) => FirebaseMlService(),
+        ),
+        Provider(
+          create: (context) => LiteRtService(
+            mlService: context.read<FirebaseMlService>(),
+          )..init(),
         ),
       ],
       child: FoodRecognizerApp(),

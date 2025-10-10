@@ -33,7 +33,7 @@ class LiteRtService {
   late Tensor inputTensor;
   late Tensor outputTensor;
 
-  Future<void> initHelper() async {
+  Future<void> init() async {
     _loadModel();
     _loadLabels();
 
@@ -44,7 +44,7 @@ class LiteRtService {
 
   Future<void> _loadModel() async {
     // Download hosted model from Firebase Machine Learning
-    modelFile = await _mlService.loadModel();
+    modelFile = await _mlService.getModel();
 
     final options = InterpreterOptions()
       ..useNnApiForAndroid = true
@@ -66,7 +66,7 @@ class LiteRtService {
   }
 
   Future<void> _loadLabels() async {
-    final labelTxt = await rootBundle.loadString('assets/aiy_food_V1_labelmap.csv');
+    final labelTxt = await rootBundle.loadString('assets/aiy_food_V1_labels.txt');
 
     labels = labelTxt.split('\n');
   }
@@ -92,6 +92,5 @@ class LiteRtService {
 
   void close() {
     isolateInference.close();
-    interpreter.close();
   }
 }

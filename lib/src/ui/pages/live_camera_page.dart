@@ -1,8 +1,12 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 
+// Package imports:
+import 'package:provider/provider.dart';
+
 // Project imports:
 import 'package:food_recognizer/core/extensions/text_style_extension.dart';
+import 'package:food_recognizer/src/ui/providers/food_recognizer_provider.dart';
 import 'package:food_recognizer/src/ui/widget/analyzing_label.dart';
 import 'package:food_recognizer/src/ui/widget/camera_view.dart';
 import 'package:food_recognizer/src/ui/widget/scaffold_safe_area.dart';
@@ -44,17 +48,10 @@ class _LiveCameraBody extends StatefulWidget {
 }
 
 class _LiveCameraBodyState extends State<_LiveCameraBody> {
-  // late final readViewmodel = context.read<ImageClassificationViewmodel>();
-
-  @override
-  void dispose() {
-    // Future.microtask(() async => await readViewmodel.close());
-
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
+    final provider = context.read<FoodRecognizerProvider>();
+
     return ColoredBox(
       color: ColorScheme.of(context).onSurface,
       child: Column(
@@ -63,52 +60,44 @@ class _LiveCameraBodyState extends State<_LiveCameraBody> {
           Expanded(
             child: CameraView(
               onImage: (cameraImage) async {
-                // await readViewmodel.runClassification(cameraImage);
+                if (!mounted || provider.isDisposed) return;
+
+                await provider.runInference(cameraImage);
               },
             ),
           ),
           Container(
             padding: EdgeInsets.all(20),
             color: ColorScheme.of(context).surface,
-            child: Row(
-              spacing: 8,
-              children: [
-                Expanded(
-                  child: AnalyzingLabel(),
-                ),
-                Text(
-                  '00.00%',
-                  style: TextTheme.of(context).titleSmall!.medium,
-                ),
-              ],
+            child: Consumer<FoodRecognizerProvider>(
+              builder: (context, provider, child) {
+                final classifications = provider.classifications;
+
+                if (classifications.isEmpty) {
+                  return AnalyzingLabel();
+                }
+
+                final predictedLabel = classifications.keys.first;
+                final confidenceScore = classifications.values.first;
+
+                return Row(
+                  spacing: 8,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        predictedLabel,
+                        style: TextTheme.of(context).titleLarge!.bold,
+                      ),
+                    ),
+                    Text(
+                      '${(confidenceScore * 100).toStringAsFixed(1)}%',
+                      style: TextTheme.of(context).titleSmall!.medium,
+                    ),
+                  ],
+                );
+              },
             ),
           ),
-          // Positioned(
-          //   bottom: 0,
-          //   right: 0,
-          //   left: 0,
-          //   child: Consumer<ImageClassificationViewmodel>(
-          //     builder: (_, updateViewmodel, __) {
-          //       final classifications = updateViewmodel.classifications.entries;
-
-          //       if (classifications.isEmpty) {
-          //         return const SizedBox.shrink();
-          //       }
-          //       return SingleChildScrollView(
-          //         child: Column(
-          //           children: classifications
-          //               .map(
-          //                 (classification) => ClassificatioinItem(
-          //                   item: classification.key,
-          //                   value: classification.value.toStringAsFixed(2),
-          //                 ),
-          //               )
-          //               .toList(),
-          //         ),
-          //       );
-          //     },
-          //   ),
-          // ),
         ],
       ),
     );

@@ -8,11 +8,13 @@ import 'package:provider/provider.dart';
 import 'package:food_recognizer/core/routes/route_names.dart';
 import 'package:food_recognizer/src/services/gemini_service.dart';
 import 'package:food_recognizer/src/services/image_picker_service.dart';
+import 'package:food_recognizer/src/services/lite_rt_service.dart';
 import 'package:food_recognizer/src/services/meal_api_service.dart';
 import 'package:food_recognizer/src/ui/pages/detail_page.dart';
 import 'package:food_recognizer/src/ui/pages/home_page.dart';
 import 'package:food_recognizer/src/ui/pages/live_camera_page.dart';
 import 'package:food_recognizer/src/ui/pages/result_page.dart';
+import 'package:food_recognizer/src/ui/providers/food_recognizer_provider.dart';
 import 'package:food_recognizer/src/ui/providers/gemini_provider.dart';
 import 'package:food_recognizer/src/ui/providers/image_picker_provider.dart';
 import 'package:food_recognizer/src/ui/providers/meal_api_provider.dart';
@@ -61,7 +63,13 @@ Route<dynamic>? generateAppRoutes(RouteSettings settings) {
       );
     case Routes.liveCamera:
       return MaterialPageRoute(
-        builder: (_) => LiveCameraPage(),
+        builder: (context) => ChangeNotifierProvider(
+          create: (context) => FoodRecognizerProvider(
+            context.read<LiteRtService>(),
+          ),
+          lazy: false,
+          child: LiveCameraPage(),
+        ),
       );
     default:
       return null;

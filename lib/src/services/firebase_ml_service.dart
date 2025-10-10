@@ -11,10 +11,10 @@ class FirebaseMlService {
 
   factory FirebaseMlService() => _instance;
 
-  Future<File> loadModel() async {
-    final instance = FirebaseModelDownloader.instance;
+  Future<File> getModel() async {
+    final firebaseModelDownloader = FirebaseModelDownloader.instance;
 
-    final model = await instance.getModel(
+    final model = await firebaseModelDownloader.getModel(
       "Food-Recognizer",
       FirebaseModelDownloadType.localModel,
       FirebaseModelDownloadConditions(

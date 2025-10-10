@@ -23,8 +23,9 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
   CameraController? controller;
 
   List<CameraDescription> _cameras = [];
-  bool _isCameraInitialized = false;
+  bool _isInitialized = false;
   bool _isProcessing = false;
+  bool _isDisposed = false;
   bool _isFlashOn = false;
   bool _isRearCamera = true;
 
@@ -39,6 +40,8 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
 
   @override
   void dispose() {
+    _isDisposed = true;
+
     WidgetsBinding.instance.removeObserver(this);
 
     controller!
@@ -53,9 +56,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
     final CameraController? cameraController = controller;
 
     // App state changed before we got the chance to initialize.
-    if (cameraController != null || !cameraController!.value.isInitialized) {
-      return;
-    }
+    if (cameraController != null || !cameraController!.value.isInitialized) return;
 
     switch (state) {
       case AppLifecycleState.inactive:
@@ -70,7 +71,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return _isCameraInitialized
+    return _isInitialized
         ? Stack(
             fit: StackFit.expand,
             children: [
@@ -171,7 +172,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
                 controller!.startImageStream(_processCameraImage);
               }
 
-              _isCameraInitialized = controller!.value.isInitialized;
+              _isInitialized = controller!.value.isInitialized;
             });
           }
         })
@@ -181,9 +182,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
   }
 
   Future<void> _processCameraImage(CameraImage image) async {
-    if (_isProcessing) {
-      return;
-    }
+    if (_isProcessing || _isDisposed || !mounted) return;
 
     _isProcessing = true;
 
