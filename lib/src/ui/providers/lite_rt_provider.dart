@@ -105,10 +105,14 @@ class LiteRtProvider extends ChangeNotifier {
   /// Ambil top-1 dari hasil inferensi
   MapEntry<String, double>? _topOneOf(Map<String, double> result) {
     if (result.isEmpty) return null;
-    
+
     final sorted = result.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
 
     return sorted.first;
+  }
+
+  void resetClassifications() {
+    _classifications = {};
   }
 
   void close() {

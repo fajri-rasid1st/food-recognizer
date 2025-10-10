@@ -52,7 +52,7 @@ class _HomeAppBarState extends State<_HomeAppBar> {
 
   @override
   void dispose() {
-    Future.microtask(() => liteRtProvider.close());
+    liteRtProvider.close();
 
     super.dispose();
   }
@@ -201,11 +201,10 @@ class _ImagePickerWidget extends StatelessWidget {
       final classifications = liteRtProvider.classifications;
 
       if (classifications.isEmpty) {
-        if (!context.mounted) return;
-
-        ScaffoldMessenger.of(context).showSnackBar(
+        ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(
           SnackBar(
             content: Text('Gambar yang dimasukkan tidak terdeteksi sebagai makanan.'),
+            duration: Duration(seconds: 3),
           ),
         );
       }

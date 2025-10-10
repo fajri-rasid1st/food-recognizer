@@ -48,10 +48,24 @@ class _LiveCameraBody extends StatefulWidget {
 }
 
 class _LiveCameraBodyState extends State<_LiveCameraBody> {
+  late final LiteRtProvider liteRtProvider;
+
+  @override
+  void initState() {
+    super.initState();
+
+    liteRtProvider = context.read<LiteRtProvider>();
+  }
+
+  @override
+  void dispose() {
+    liteRtProvider.resetClassifications();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final liteRtProvider = context.read<LiteRtProvider>();
-
     return ColoredBox(
       color: ColorScheme.of(context).onSurface,
       child: Column(
