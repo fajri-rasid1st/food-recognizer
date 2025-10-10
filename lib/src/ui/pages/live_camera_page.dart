@@ -50,7 +50,7 @@ class _LiveCameraBody extends StatefulWidget {
 class _LiveCameraBodyState extends State<_LiveCameraBody> {
   @override
   Widget build(BuildContext context) {
-    final provider = context.read<FoodRecognizerProvider>();
+    final foodRecognizerProvider = context.read<FoodRecognizerProvider>();
 
     return ColoredBox(
       color: ColorScheme.of(context).onSurface,
@@ -60,9 +60,9 @@ class _LiveCameraBodyState extends State<_LiveCameraBody> {
           Expanded(
             child: CameraView(
               onImage: (cameraImage) async {
-                if (!mounted || provider.isDisposed) return;
+                if (!mounted || foodRecognizerProvider.isDisposed) return;
 
-                await provider.runInference(cameraImage);
+                await foodRecognizerProvider.runInference(cameraImage);
               },
             ),
           ),

@@ -24,10 +24,19 @@ Route<dynamic>? generateAppRoutes(RouteSettings settings) {
   switch (settings.name) {
     case Routes.home:
       return MaterialPageRoute(
-        builder: (context) => ChangeNotifierProvider(
-          create: (context) => ImagePickerProvider(
-            context.read<ImagePickerService>(),
-          ),
+        builder: (context) => MultiProvider(
+          providers: [
+            ChangeNotifierProvider(
+              create: (context) => ImagePickerProvider(
+                context.read<ImagePickerService>(),
+              ),
+            ),
+            ChangeNotifierProvider(
+              create: (context) => FoodRecognizerProvider(
+                context.read<LiteRtService>(),
+              ),
+            ),
+          ],
           child: HomePage(),
         ),
       );
@@ -62,12 +71,11 @@ Route<dynamic>? generateAppRoutes(RouteSettings settings) {
         ),
       );
     case Routes.liveCamera:
+      final args = settings.arguments as Map<String, dynamic>;
+
       return MaterialPageRoute(
-        builder: (context) => ChangeNotifierProvider(
-          create: (context) => FoodRecognizerProvider(
-            context.read<LiteRtService>(),
-          ),
-          lazy: false,
+        builder: (context) => ChangeNotifierProvider.value(
+          value: args['provider'] as FoodRecognizerProvider,
           child: LiveCameraPage(),
         ),
       );

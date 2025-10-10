@@ -47,7 +47,7 @@ void main() async {
         Provider(
           create: (context) => LiteRtService(
             mlService: context.read<FirebaseMlService>(),
-          )..init(),
+          ),
         ),
       ],
       child: FoodRecognizerApp(),

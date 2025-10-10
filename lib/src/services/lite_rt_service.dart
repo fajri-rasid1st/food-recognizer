@@ -1,9 +1,9 @@
 // Dart imports:
-import 'dart:developer';
 import 'dart:io';
 import 'dart:isolate';
 
 // Flutter imports:
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 // Package imports:
@@ -34,8 +34,8 @@ class LiteRtService {
   late Tensor outputTensor;
 
   Future<void> init() async {
-    _loadModel();
-    _loadLabels();
+    await _loadModel();
+    await _loadLabels();
 
     isolateInference = IsolateInference();
 
@@ -43,6 +43,8 @@ class LiteRtService {
   }
 
   Future<void> _loadModel() async {
+    debugPrint('Interpreter on loading...');
+
     // Download hosted model from Firebase Machine Learning
     modelFile = await _mlService.getModel();
 
@@ -62,7 +64,7 @@ class LiteRtService {
     // Get tensor output shape [1, 1001]
     outputTensor = interpreter.getOutputTensors().first;
 
-    log('Interpreter loaded successfully');
+    debugPrint('Interpreter loaded successfully');
   }
 
   Future<void> _loadLabels() async {

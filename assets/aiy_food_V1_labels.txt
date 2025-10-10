@@ -10,6 +10,7 @@ Miyan kuka
 Efo riro
 Ayam masak merah
 Chiffon pie
+/g/11b8_rxx4d
 Riso patate e cozze
 Bazin
 Black bottom pie
@@ -29,6 +30,7 @@ Karydopita
 Rinflajš
 Hainanese curry rice
 Sonoran hot dog
+/g/11cfty6q3
 Afghani burger
 Teochew porridge
 Minestra di ceci
@@ -38,6 +40,7 @@ Chahan
 Ekuru
 Sciusceddu
 Breakfast burrito
+/g/11dyjj24g
 Sausage Stroganoff
 Roti jala
 Pirao
@@ -49,18 +52,21 @@ Bruckfleisch
 Molote
 Spongata
 Funge
-Älplermagronen
+/g/1212ghsj
 Köttbullar
 Ka'ak
 Papet vaudois
+/g/12148tdg
 Prosciutto di Norcia
 Malloreddus
+/g/1214g6v_
 Pannenkoek
 Dirty macaroni
-Roscón de reyes
+/g/12175t2y
 Garlic butter shrimp
 Fricasse
 Stracciatella
+/g/121b74wr
 Sartù
 Matelote
 Baodu
@@ -73,6 +79,8 @@ Khanom mo kaeng
 Suimono
 Dimlama
 Tavë Kosi
+/g/121p63r3
+/g/121slhcd
 Kalach
 Jambon persillé
 Pork Bones
@@ -81,43 +89,51 @@ Roccocò
 Feijão de óleo de palma
 Calulu
 Bey's Soup
+/g/1226mnbh
 Thịt kho tàu
 Bon bon chicken
 Zoque
 Bint al-sahn
 Tempoyak
 Puran poli
-Enfrijoladas
+/g/122m40vc
 Chueo-tang
 Naem
-Sate Kikil
-Pinzimonio
+/g/122qyvy7
+/g/122rd60t
 Pizokel
+/g/122vxtxs
 Schiacciata
 Daheen
 Chapssal-tteok
+/g/123267k_
 Crescentina modenese
 Pansotti
 Fried eggplant
 Portuguese seafood rice
 Tripes à la mode de Caen
-Arraksboll
+/g/12353lp9
 Brenebon
 Gnocco fritto
-Pan di ramerino
+/g/12384pzv
 Tahu tek-tek
 Bibikkan
 Squid tongseng
+/g/12fgs6199
 Bundevara
 Sop saudara
+/g/155q8w2m
 Erbazzone
 Kisra
 Meat from tiblica
+/g/1hc0hhj4r
 Yufka
 Pisarei e faśö
+/g/1pznmr_ch
 Pampushka
 Makowiec
 Saleeg
+/m/0100fwt6
 Jókai bean soup
 Bookbinder soup
 Selat solo
@@ -149,6 +165,7 @@ Arroz chaufa
 Kuih
 Ayam goreng
 Chongos zamoranos
+/m/011c708
 Mămăligă
 Candied almonds
 Lasagne
@@ -156,6 +173,7 @@ Pecel Lele
 Lettuce soup
 Acquacotta
 Pork blood soup
+/m/011sq8kg
 Buridda
 Maccu
 Turkey Devonshire
@@ -183,6 +201,7 @@ Mie kangkung
 Tuwo masara
 Kokonte
 Akple
+/m/012vypzp
 Kwareżimal
 Bento
 Osechi
@@ -209,6 +228,7 @@ Mutton curry
 Mughlai paratha
 Tuo Zaafi
 Bánh bột lọc
+/m/013f387h
 Cheeseburger
 Jelly bean
 Apple pie
@@ -339,6 +359,7 @@ Ciauscolo
 Khatkhate
 Pan de muerto
 Caponata
+/m/0267f9w
 Sabaayad
 Miyeok-guk
 Imoni
@@ -526,7 +547,7 @@ Lobio
 Suman
 Hōtō
 Matbukha
-Kousa mahshi
+/m/02rgjs1
 Açorda
 Makdous
 Soto
@@ -558,6 +579,7 @@ Beef ball
 Siu yuk
 Seafood birdsnest
 White cut chicken
+/m/02vwryj
 Satsivi
 Malpua
 Chhena gaja
@@ -956,6 +978,7 @@ Salmorejo
 Chicken Française
 Fläskkorv
 Glorified rice
+/m/04zzsvg
 Stinky tofu
 Muffuletta
 Soy sauce chicken
@@ -974,7 +997,7 @@ Minestrone
 Boxty
 Naengmyeon
 Seven-layer salad
-Samgyeopsal
+/m/0553tg
 Cawl
 Chocolate pudding
 Hotdish
@@ -1095,8 +1118,8 @@ Ulam
 Kheer
 Tlacoyo
 Tarator
-Kuy teav
-Teja
+/m/061ptq
+/m/062p8x
 Cochinita pibil
 Buddha Jumps Over the Wall
 Sfouf
@@ -1112,6 +1135,7 @@ Baozi
 Kibbeh
 Kushari
 Jiuniang
+/m/06603bl
 Machher Jhol
 Fahsa
 Mysore pak
@@ -1191,6 +1215,7 @@ Sinigang
 Fios de ovos
 Vitello tonnato
 Bisque
+/m/06w9wv4
 Modak
 New Haven-style pizza
 California-style pizza
@@ -1259,6 +1284,7 @@ Vetkoek
 Mealie bread
 Chakalaka
 Frikkadel
+/m/07fr1x
 Tteokguk
 Coney Island hot dog
 Tirokafteri
@@ -1268,7 +1294,7 @@ Buttermilk koldskål
 White boiled shrimp
 Bagnun
 Buntil
-Kaiserschmarrn
+/m/07l949
 Pisto
 Dhokla
 Al pastor
@@ -1312,7 +1338,7 @@ Sausage gravy
 Derby pie
 Ice cream cake
 Swiss steak
-Bagna cÃ uda
+/m/083tx9
 Stack cake
 Lobster Newberg
 Nikujaga
@@ -1367,7 +1393,7 @@ Idiyappam
 Smörgåstårta
 Smažený sýr
 Arroz con pollo
-Lahmacun
+/m/08xmsn
 Petit gâteau
 Tea egg
 Cocada amarela
@@ -1631,6 +1657,7 @@ Runeberg torte
 Khakhra
 Ohn no khao swè
 Sultsina
+/m/0crv0m
 Paella
 Espetada
 Pathiri
@@ -1682,6 +1709,7 @@ Jing Jiang Rou Si
 Enduri Pitha
 Kakara pitha
 Tarta de Santiago
+/m/0dn9nd
 Sheftalia
 Soybean sprout
 Italian hot dog
@@ -1859,6 +1887,7 @@ Vangibath
 Torricado
 Phat phrik khing
 Tomato and egg soup
+/m/0h65ym4
 Spanakorizo
 Ostropel
 Tamale
@@ -1877,6 +1906,7 @@ Koi
 Stir-fried tomato and scrambled eggs
 Flæskesteg
 Beggar's Chicken
+/m/0hzpvf0
 Konkonte
 Stuffed squash
 Kaeng som
@@ -1888,6 +1918,7 @@ Cornulețe
 Quad City-style pizza
 Paneer tikka
 Ciorbă de perișoare
+/m/0j66841
 Shaker lemon pie
 Doodhpak
 Ceviche

@@ -154,7 +154,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
     final cameraController = CameraController(
       cameraDescription,
       ResolutionPreset.veryHigh,
-      fps: 30,
+      fps: 25,
       enableAudio: false,
       imageFormatGroup: Platform.isAndroid ? ImageFormatGroup.yuv420 : ImageFormatGroup.bgra8888,
     );
@@ -177,7 +177,7 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
           }
         })
         .catchError((e) {
-          debugPrint('Error initializing camera: $e');
+          debugPrint('error initializing camera: $e');
         });
   }
 

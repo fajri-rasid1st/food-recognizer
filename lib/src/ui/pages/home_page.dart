@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 import 'package:food_recognizer/core/extensions/text_style_extension.dart';
 import 'package:food_recognizer/core/routes/route_names.dart';
 import 'package:food_recognizer/core/utilities/navigator_key.dart';
+import 'package:food_recognizer/src/ui/providers/food_recognizer_provider.dart';
 import 'package:food_recognizer/src/ui/providers/image_picker_provider.dart';
 import 'package:food_recognizer/src/ui/widget/scaffold_safe_area.dart';
 
@@ -28,8 +29,32 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class _HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
+class _HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
   const _HomeAppBar();
+
+  @override
+  State<_HomeAppBar> createState() => _HomeAppBarState();
+
+  @override
+  Size get preferredSize => Size.fromHeight(kToolbarHeight + 4);
+}
+
+class _HomeAppBarState extends State<_HomeAppBar> {
+  late final FoodRecognizerProvider foodRecognizerProvider;
+
+  @override
+  void initState() {
+    super.initState();
+
+    foodRecognizerProvider = context.read<FoodRecognizerProvider>();
+  }
+
+  @override
+  void dispose() {
+    Future.microtask(() => foodRecognizerProvider.close());
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,14 +68,14 @@ class _HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           iconSize: 28,
           color: ColorScheme.of(context).onSurface,
           tooltip: 'Live Food Recognizer',
-          onPressed: () => navigatorKey.currentState!.pushNamed(Routes.liveCamera),
+          onPressed: () => navigatorKey.currentState!.pushNamed(
+            Routes.liveCamera,
+            arguments: {'provider': foodRecognizerProvider},
+          ),
         ),
       ],
     );
   }
-
-  @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight + 4);
 }
 
 class _HomeBody extends StatelessWidget {
