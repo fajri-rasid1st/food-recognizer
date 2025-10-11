@@ -59,8 +59,6 @@ class LiteRtProvider extends ChangeNotifier {
       if (_isDisposed) return;
 
       _applyThreshold(result);
-
-      notifyListeners();
     } catch (e) {
       if (_isDisposed) return;
 
@@ -82,8 +80,6 @@ class LiteRtProvider extends ChangeNotifier {
       if (_isDisposed) return;
 
       _applyThreshold(result);
-
-      notifyListeners();
     } catch (e) {
       if (_isDisposed) return;
 
@@ -100,6 +96,8 @@ class LiteRtProvider extends ChangeNotifier {
     } else {
       _classifications = result;
     }
+
+    notifyListeners();
   }
 
   /// Ambil top-1 dari hasil inferensi
@@ -113,6 +111,7 @@ class LiteRtProvider extends ChangeNotifier {
 
   void resetClassifications() {
     _classifications = {};
+    notifyListeners();
   }
 
   void close() {

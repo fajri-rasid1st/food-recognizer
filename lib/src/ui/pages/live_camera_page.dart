@@ -1,5 +1,6 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:food_recognizer/core/utilities/navigator_key.dart';
 
 // Package imports:
 import 'package:provider/provider.dart';
@@ -33,6 +34,20 @@ class _LiveCameraAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Text('Live Food Recognizer'),
       titleTextStyle: TextTheme.of(context).titleLarge!.semiBold.colorOnSurface(context),
       titleSpacing: 0,
+      automaticallyImplyLeading: false,
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back),
+        onPressed: () {
+          final liteRtProvider = context.read<LiteRtProvider>();
+
+          liteRtProvider.resetClassifications();
+
+          if (liteRtProvider.classifications.isEmpty) {
+            navigatorKey.currentState!.pop();
+          }
+        },
+        tooltip: 'Back',
+      ),
     );
   }
 
@@ -40,79 +55,72 @@ class _LiveCameraAppBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => Size.fromHeight(kToolbarHeight + 4);
 }
 
-class _LiveCameraBody extends StatefulWidget {
+class _LiveCameraBody extends StatelessWidget {
   const _LiveCameraBody();
 
   @override
-  State<_LiveCameraBody> createState() => _LiveCameraBodyState();
-}
-
-class _LiveCameraBodyState extends State<_LiveCameraBody> {
-  late final LiteRtProvider liteRtProvider;
-
-  @override
-  void initState() {
-    super.initState();
-
-    liteRtProvider = context.read<LiteRtProvider>();
-  }
-
-  @override
-  void dispose() {
-    liteRtProvider.resetClassifications();
-
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return ColoredBox(
-      color: ColorScheme.of(context).onSurface,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: CameraView(
-              onImage: (cameraImage) async {
-                if (!mounted || liteRtProvider.isDisposed) return;
+    final liteRtProvider = context.read<LiteRtProvider>();
 
-                await liteRtProvider.runInferenceFromCameraFrame(cameraImage);
-              },
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+
+        liteRtProvider.resetClassifications();
+
+        if (liteRtProvider.classifications.isEmpty) {
+          navigatorKey.currentState!.pop();
+        }
+      },
+      child: ColoredBox(
+        color: ColorScheme.of(context).onSurface,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: CameraView(
+                onImage: (cameraImage) async {
+                  if (!context.mounted || liteRtProvider.isDisposed) return;
+
+                  await liteRtProvider.runInferenceFromCameraFrame(cameraImage);
+                },
+              ),
             ),
-          ),
-          Container(
-            padding: EdgeInsets.all(20),
-            color: ColorScheme.of(context).surface,
-            child: Consumer<LiteRtProvider>(
-              builder: (context, provider, child) {
-                final classifications = provider.classifications;
+            Container(
+              padding: EdgeInsets.all(20),
+              color: ColorScheme.of(context).surface,
+              child: Consumer<LiteRtProvider>(
+                builder: (context, provider, child) {
+                  final classifications = provider.classifications;
 
-                if (classifications.isEmpty) {
-                  return AnalyzingLabel();
-                }
+                  if (classifications.isEmpty) {
+                    return AnalyzingLabel();
+                  }
 
-                final predictedLabel = classifications.keys.first;
-                final confidenceScore = classifications.values.first;
+                  final predictedLabel = classifications.keys.first;
+                  final confidenceScore = classifications.values.first;
 
-                return Row(
-                  spacing: 8,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        predictedLabel,
-                        style: TextTheme.of(context).titleLarge!.bold,
+                  return Row(
+                    spacing: 8,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          predictedLabel,
+                          style: TextTheme.of(context).titleLarge!.bold,
+                        ),
                       ),
-                    ),
-                    Text(
-                      '${(confidenceScore * 100).toStringAsFixed(1)}%',
-                      style: TextTheme.of(context).titleSmall!.medium,
-                    ),
-                  ],
-                );
-              },
+                      Text(
+                        '${(confidenceScore * 100).toStringAsFixed(1)}%',
+                        style: TextTheme.of(context).titleSmall!.medium,
+                      ),
+                    ],
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
