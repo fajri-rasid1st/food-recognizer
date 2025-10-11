@@ -34,7 +34,7 @@ class LiteRtProvider extends ChangeNotifier {
 
   // Classifications result
   Map<String, double> _classifications = {};
-  Map<String, num> get classifications => Map.fromEntries(
+  Map<String, double> get classifications => Map.fromEntries(
     (_classifications.entries.toList()..sort((a, b) => a.value.compareTo(b.value))).reversed.take(1),
   );
 
